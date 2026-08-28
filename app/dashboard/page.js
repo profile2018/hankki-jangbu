@@ -33,7 +33,6 @@ export default function DashboardPage() {
   }, []);
 
   async function logout() { const supabase = createClient(); await supabase.auth.signOut(); window.location.replace("/"); }
-
   function change(e) { setForm({ ...form, [e.target.name]: e.target.value }); }
 
   async function saveCompany(e) {
@@ -66,7 +65,7 @@ export default function DashboardPage() {
     <section className="cards"><article><span>오늘 중식</span><strong>0명</strong></article><article><span>오늘 석식</span><strong>0명</strong></article><article><span>등록 거래처</span><strong>{companies.length}곳</strong></article><article><span>무료체험</span><strong>{trialDays}일</strong></article></section>
 
     <section className="company-section">
-      <div className="section-head"><div><h2>거래처 관리</h2><p>식당 사장님이 거래처와 식수 입력용 PIN을 관리합니다.</p></div><button className="btn primary" onClick={() => { setMessage(""); setShowCompanyForm(!showCompanyForm); }}>{showCompanyForm ? "닫기" : "+ 거래처 등록"}</button></div>
+      <div className="section-head"><div><h2>거래처 관리</h2><p>식당 사장님이 거래처와 식수 입력용 PIN을 관리합니다.</p></div><div className="section-actions">{restaurant?.id && <a className="btn secondary" href={`/kiosk?r=${restaurant.id}`} target="_blank" rel="noreferrer">키오스크 화면 열기</a>}<button className="btn primary" onClick={() => { setMessage(""); setShowCompanyForm(!showCompanyForm); }}>{showCompanyForm ? "닫기" : "+ 거래처 등록"}</button></div></div>
       {message && <p className={message.includes("등록되었습니다") ? "notice" : "error"}>{message}</p>}
       {showCompanyForm && <form className="company-form" onSubmit={saveCompany}>
         <div className="grid2"><label>업체번호 *<input name="company_no" value={form.company_no} onChange={change} required placeholder="예) 101" /></label><label>업체명 *<input name="name" value={form.name} onChange={change} required placeholder="예) 창조티엔에프" /></label></div>
