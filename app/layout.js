@@ -3,12 +3,20 @@ import "./globals.css";
 export const metadata = {
   title: "한끼장부",
   description: "공단 한식뷔페 식수·정산 관리",
-  applicationName: "한끼장부",
   manifest: "/manifest.webmanifest",
-  themeColor: "#0b2f5b",
+  appleWebApp: {
+    capable: true,
+    title: "한끼장부",
+    statusBarStyle: "default",
+  },
   icons: {
-    icon: "/icon.svg",
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon-192", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512", sizes: "512x512", type: "image/png" },
+    ],
     shortcut: "/icon.svg",
+    apple: [{ url: "/apple-icon", sizes: "180x180", type: "image/png" }],
   },
 };
 
@@ -19,6 +27,10 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ko">
+      <head>
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon?v=3" />
+        <link rel="manifest" href="/manifest.webmanifest?v=3" />
+      </head>
       <body>{children}</body>
     </html>
   );
