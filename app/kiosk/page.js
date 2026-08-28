@@ -29,6 +29,7 @@ export default function KioskPage() {
     const row = Array.isArray(data) ? data[0] : data;
     if (error || !row) {
       setCompany(null);
+      setPin("");
       setMessage("등록된 업체를 찾을 수 없습니다. PIN을 다시 확인해 주세요.");
     } else {
       setCompany(row);
@@ -36,6 +37,24 @@ export default function KioskPage() {
       setHeadcount(1);
     }
     setBusy(false);
+  }
+
+  function pressPinNumber(number) {
+    if (busy) return;
+    setMessage("");
+    setPin((current) => current.length >= 4 ? current : `${current}${number}`);
+  }
+
+  function backspacePin() {
+    if (busy) return;
+    setMessage("");
+    setPin((current) => current.slice(0, -1));
+  }
+
+  function clearPin() {
+    if (busy) return;
+    setMessage("");
+    setPin("");
   }
 
   async function submitMeal() {
@@ -72,8 +91,17 @@ export default function KioskPage() {
   return <main className="kiosk-shell"><section className="kiosk-card">
     <header className="kiosk-head"><div className="mini-brand">한끼</div><div><strong>한끼장부</strong><span>식수 입력</span></div></header>
     {!company ? <>
-      <div className="kiosk-title"><p>업체 PIN을 입력해 주세요</p><h1>오늘 식사 인원을 기록합니다</h1><span>식당 사장님께 안내받은 4자리 번호를 입력해 주세요.</span></div>
-      <form onSubmit={identify} className="pin-form"><input aria-label="업체 PIN" inputMode="numeric" maxLength={4} value={pin} onChange={(e)=>setPin(e.target.value.replace(/\D/g, ""))} placeholder="••••" autoFocus /><button className="btn primary" disabled={busy}>{busy ? "확인 중..." : "업체 확인"}</button></form>
+      <div className="kiosk-title"><p>업체 PIN을 입력해 주세요</p><h1>오늘 식사 인원을 기록합니다</h1><span>아래 숫자패드에서 안내받은 4자리 번호를 눌러 주세요.</span></div>
+      <div className="kiosk-pin-display" aria-label="입력한 업체 PIN">
+        {[0,1,2,3].map((index)=><span key={index} className={pin.length>index?"filled":""}>{pin.length>index?"●":""}</span>)}
+      </div>
+      <div className="kiosk-keypad" aria-label="숫자패드">
+        {[1,2,3,4,5,6,7,8,9].map((n)=><button type="button" key={n} onClick={()=>pressPinNumber(n)} disabled={busy}>{n}</button>)}
+        <button type="button" className="keypad-action" onClick={clearPin} disabled={busy}>전체지움</button>
+        <button type="button" onClick={()=>pressPinNumber(0)} disabled={busy}>0</button>
+        <button type="button" className="keypad-action" onClick={backspacePin} disabled={busy}>⌫</button>
+      </div>
+      <button type="button" className="btn primary kiosk-pin-confirm" onClick={identify} disabled={busy || pin.length !== 4}>{busy ? "확인 중..." : "업체 확인"}</button>
     </> : <>
       <div className="company-confirm"><span>확인된 업체</span><h1>{company.company_name}</h1><button onClick={reset}>다시 입력</button></div>
       <div className="meal-buttons">
