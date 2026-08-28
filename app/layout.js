@@ -1,6 +1,7 @@
 import "./globals.css";
 import "./settlement-extra.css";
 import "./modal-scroll-fix.css";
+import "./kiosk-extra.css";
 
 export const metadata = {
   title: "한끼장부",
