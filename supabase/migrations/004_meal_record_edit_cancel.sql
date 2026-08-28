@@ -1,6 +1,9 @@
 -- Meal record correction/cancellation with audit history.
 -- Run this migration in Supabase SQL Editor before using the dashboard actions.
 
+alter table public.meal_records
+add column if not exists cancelled_at timestamptz;
+
 create or replace function public.update_meal_record(
   p_record_id uuid,
   p_meal_type text,
@@ -29,6 +32,9 @@ begin
 
   if v_before.id is null then
     raise exception 'meal record not found';
+  end if;
+  if v_before.cancelled_at is not null then
+    raise exception 'cancelled meal record';
   end if;
 
   if not exists (
@@ -73,13 +79,14 @@ create or replace function public.cancel_meal_record(
   p_record_id uuid,
   p_reason text default null
 )
-returns void
+returns public.meal_records
 language plpgsql
 security definer
 set search_path = public
 as $$
 declare
   v_before public.meal_records;
+  v_after public.meal_records;
 begin
   select * into v_before
   from public.meal_records
@@ -87,6 +94,9 @@ begin
 
   if v_before.id is null then
     raise exception 'meal record not found';
+  end if;
+  if v_before.cancelled_at is not null then
+    raise exception 'meal record already cancelled';
   end if;
 
   if not exists (
@@ -97,6 +107,11 @@ begin
   ) then
     raise exception 'not authorized';
   end if;
+
+  update public.meal_records
+  set cancelled_at = now()
+  where id = p_record_id
+  returning * into v_after;
 
   insert into public.meal_record_history (
     restaurant_id,
@@ -110,11 +125,11 @@ begin
     v_before.id,
     auth.uid(),
     to_jsonb(v_before),
-    null,
+    to_jsonb(v_after),
     coalesce(nullif(trim(p_reason), ''), '식수 기록 취소')
   );
 
-  delete from public.meal_records where id = p_record_id;
+  return v_after;
 end;
 $$;
 
