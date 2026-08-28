@@ -89,7 +89,7 @@ export default function SettlementStatementPage() {
   }, [records, company]);
 
   if (loading) return <main className="center-shell"><div className="form-card"><p className="helper">정산서를 만들고 있습니다...</p></div></main>;
-  if (!company || !restaurant) return <main className="center-shell"><div className="form-card"><p className="error">정산서 정보를 찾을 수 없습니다.</p><a className="btn secondary" href="/settlement">월별 정산으로 돌아가기</a></div></main>;
+  if (!company || !restaurant) return <main className="center-shell"><div className="form-card"><p className="error">정산서 정보를 찾을 수 없습니다.</p><a className="btn secondary" href="/dashboard">홈으로 돌아가기</a></div></main>;
 
   const monthText = `${month.slice(0,4)}년 ${Number(month.slice(5,7))}월`;
   const subject = `${restaurant.name} ${monthText} 식대 정산서`;
@@ -97,7 +97,7 @@ export default function SettlementStatementPage() {
   const mailHref = `mailto:${encodeURIComponent(company.contact_email || "")}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
   return <main className="statement-shell">
-    <div className="statement-toolbar no-print"><a className="btn secondary" href={`/settlement?month=${month}`}>정산 목록</a><div><a className="btn secondary" href={mailHref}>이메일 작성</a><button className="btn primary" onClick={() => window.print()}>PDF 저장 · 인쇄</button></div></div>
+    <div className="statement-toolbar no-print"><div><a className="btn secondary" href="/dashboard">홈으로</a><a className="btn secondary" href={`/settlement?month=${month}`}>정산 목록</a></div><div><a className="btn secondary" href={mailHref}>이메일 작성</a><button className="btn primary" onClick={() => window.print()}>PDF 저장 · 인쇄</button></div></div>
     <article className="statement-paper">
       <header className="statement-head"><div><span>한끼장부</span><h1>식대 정산서</h1><p>{monthText}</p></div><div className="statement-brand"><strong>{restaurant.name}</strong>{restaurant.phone && <span>{restaurant.phone}</span>}</div></header>
       <section className="statement-parties"><div><span>공급자</span><strong>{restaurant.name}</strong></div><div><span>청구처</span><strong>{company.name}</strong><small>업체번호 {company.company_no}{company.contact_name ? ` · 담당 ${company.contact_name}` : ""}</small></div></section>
