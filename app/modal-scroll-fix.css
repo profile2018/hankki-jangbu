@@ -1,0 +1,29 @@
+/* Keep long management dialogs usable on laptop, tablet and mobile screens. */
+.modal-backdrop {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  align-items: flex-start;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modal-backdrop > form,
+.modal-backdrop > .meal-edit-modal,
+.modal-backdrop > .company-edit-modal {
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  margin: auto;
+}
+
+@media (max-width: 680px) {
+  .modal-backdrop {
+    padding: 10px;
+  }
+
+  .modal-backdrop > form,
+  .modal-backdrop > .meal-edit-modal,
+  .modal-backdrop > .company-edit-modal {
+    max-height: calc(100dvh - 20px);
+  }
+}
