@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import { createClient } from "../../../lib/supabase/client";
 
 function monthBounds(value) {
@@ -12,28 +11,46 @@ function monthBounds(value) {
 }
 
 export default function SettlementStatementPage() {
-  const params = useSearchParams();
-  const companyId = params.get("company");
-  const month = params.get("month") || "";
+  const [companyId, setCompanyId] = useState("");
+  const [month, setMonth] = useState("");
   const [restaurant, setRestaurant] = useState(null);
   const [company, setCompany] = useState(null);
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!companyId || !month) { setLoading(false); return; }
+    const params = new URLSearchParams(window.location.search);
+    setCompanyId(params.get("company") || "");
+    setMonth(params.get("month") || "");
+  }, []);
+
+  useEffect(() => {
+    if (!companyId || !month) {
+      if (companyId || month) setLoading(false);
+      return;
+    }
+
     (async () => {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { window.location.replace("/login"); return; }
-      const { data: membership } = await supabase.from("restaurant_members").select("restaurant_id").eq("user_id", user.id).limit(1).maybeSingle();
+
+      const { data: membership } = await supabase
+        .from("restaurant_members")
+        .select("restaurant_id")
+        .eq("user_id", user.id)
+        .limit(1)
+        .maybeSingle();
+
       if (!membership?.restaurant_id) { window.location.replace("/onboarding"); return; }
+
       const { start, end } = monthBounds(month);
       const [{ data: restaurantRow }, { data: companyRow }, { data: mealRows }] = await Promise.all([
         supabase.from("restaurants").select("id,name,phone").eq("id", membership.restaurant_id).single(),
         supabase.from("companies").select("id,restaurant_id,company_no,name,lunch_price,dinner_price,contact_name,contact_email").eq("id", companyId).eq("restaurant_id", membership.restaurant_id).single(),
         supabase.from("meal_records").select("id,company_id,meal_type,headcount,unit_price,occurred_at,cancelled_at").eq("restaurant_id", membership.restaurant_id).eq("company_id", companyId).is("cancelled_at", null).gte("occurred_at", start).lt("occurred_at", end).order("occurred_at")
       ]);
+
       setRestaurant(restaurantRow || null);
       setCompany(companyRow || null);
       setRecords(mealRows || []);
