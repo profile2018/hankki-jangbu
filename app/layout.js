@@ -1,7 +1,9 @@
 import "./globals.css";
 import "./settlement-extra.css";
 import "./modal-scroll-fix.css";
-import "./kiosk-extra.css";
+import "./kiosk-keypad.css";
+import "./update-notice.css";
+import UpdateNotice from "./UpdateNotice";
 
 export const metadata = {
   title: "한끼장부",
@@ -34,7 +36,10 @@ export default function RootLayout({ children }) {
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon?v=3" />
         <link rel="manifest" href="/manifest.webmanifest?v=3" />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <UpdateNotice />
+      </body>
     </html>
   );
 }
