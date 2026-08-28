@@ -1,36 +1,77 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createClient } from "../../lib/supabase/client";
+
+function getTodayRange() {
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+  const end = new Date(start);
+  end.setDate(end.getDate() + 1);
+  return { start: start.toISOString(), end: end.toISOString() };
+}
 
 export default function DashboardPage() {
   const [restaurant, setRestaurant] = useState(null);
   const [companies, setCompanies] = useState([]);
+  const [mealRecords, setMealRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCompanyForm, setShowCompanyForm] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [upgradeNotice, setUpgradeNotice] = useState(null);
+  const [lastUpdated, setLastUpdated] = useState(null);
   const [form, setForm] = useState({ company_no: "", name: "", company_pin: "", lunch_price: "", dinner_price: "", contact_name: "", contact_email: "" });
+
+  async function loadTodayMeals(restaurantId) {
+    if (!restaurantId) return;
+    const supabase = createClient();
+    const { start, end } = getTodayRange();
+    const { data } = await supabase
+      .from("meal_records")
+      .select("id,company_id,meal_type,headcount,occurred_at")
+      .eq("restaurant_id", restaurantId)
+      .gte("occurred_at", start)
+      .lt("occurred_at", end)
+      .order("occurred_at", { ascending: false });
+    setMealRecords(data || []);
+    setLastUpdated(new Date());
+  }
 
   useEffect(() => {
     let active = true;
+    let timer;
+    let currentRestaurantId = null;
+
     (async () => {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { window.location.replace("/login"); return; }
       const { data: membership } = await supabase.from("restaurant_members").select("restaurant_id").eq("user_id", user.id).limit(1).maybeSingle();
       if (!membership?.restaurant_id) { window.location.replace("/onboarding"); return; }
+      currentRestaurantId = membership.restaurant_id;
       const { data } = await supabase.from("restaurants").select("id,name,default_lunch_price,default_dinner_price,trial_started_at,trial_ends_at").eq("id", membership.restaurant_id).single();
       const { data: companyRows } = await supabase.from("companies").select("id,company_no,name,lunch_price,dinner_price,contact_name,contact_email,is_active").eq("restaurant_id", membership.restaurant_id).order("company_no");
       if (active) {
         setRestaurant(data || null);
         setCompanies(companyRows || []);
         setForm((f) => ({ ...f, lunch_price: String(data?.default_lunch_price ?? 0), dinner_price: String(data?.default_dinner_price ?? 0) }));
+        await loadTodayMeals(membership.restaurant_id);
         setLoading(false);
+        timer = setInterval(() => loadTodayMeals(membership.restaurant_id), 15000);
       }
     })();
-    return () => { active = false; };
+
+    function handleVisibility() {
+      if (document.visibilityState === "visible" && currentRestaurantId) loadTodayMeals(currentRestaurantId);
+    }
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    return () => {
+      active = false;
+      if (timer) clearInterval(timer);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
   }, []);
 
   async function logout() { const supabase = createClient(); await supabase.auth.signOut(); window.location.replace("/"); }
@@ -57,6 +98,29 @@ export default function DashboardPage() {
     setSaving(false);
   }
 
+  const mealSummary = useMemo(() => {
+    const companyMap = new Map(companies.map((c) => [c.id, c.name]));
+    let lunch = 0;
+    let dinner = 0;
+    const rows = new Map();
+
+    mealRecords.forEach((record) => {
+      const count = Number(record.headcount || 0);
+      if (record.meal_type === "lunch") lunch += count;
+      if (record.meal_type === "dinner") dinner += count;
+
+      const key = record.company_id || "guest";
+      if (!rows.has(key)) rows.set(key, { id: key, name: record.company_id ? (companyMap.get(record.company_id) || "등록 업체") : "기타 손님", lunch: 0, dinner: 0, total: 0, lastTime: record.occurred_at });
+      const row = rows.get(key);
+      if (record.meal_type === "lunch") row.lunch += count;
+      if (record.meal_type === "dinner") row.dinner += count;
+      row.total += count;
+      if (new Date(record.occurred_at) > new Date(row.lastTime)) row.lastTime = record.occurred_at;
+    });
+
+    return { lunch, dinner, total: lunch + dinner, rows: Array.from(rows.values()).sort((a, b) => b.total - a.total) };
+  }, [mealRecords, companies]);
+
   if (loading) return <main className="center-shell"><div className="form-card"><p className="helper">식당 정보를 불러오고 있습니다...</p></div></main>;
   const now = new Date(); const end = restaurant?.trial_ends_at ? new Date(restaurant.trial_ends_at) : null; const trialDays = end ? Math.max(0, Math.ceil((end - now) / 86400000)) : 0;
   const premiumFeatures = [
@@ -67,8 +131,14 @@ export default function DashboardPage() {
 
   return <main className="dashboard-shell">
     <header className="topbar"><div><strong>한끼장부</strong><span>{restaurant?.name || "사장님 관리"}</span></div><button onClick={logout}>로그아웃</button></header>
-    <section className="hero"><p>오늘 현황</p><h1>{companies.length ? "식수 관리" : "거래처를 먼저 등록해 주세요"}</h1><p>{companies.length ? "등록된 거래처와 오늘 식수 현황을 관리합니다." : "사장님이 업체별 PIN을 부여하면 직원들이 키오스크에서 PIN으로 식수를 입력할 수 있습니다."}</p></section>
-    <section className="cards"><article><span>오늘 중식</span><strong>0명</strong></article><article><span>오늘 석식</span><strong>0명</strong></article><article><span>등록 거래처</span><strong>{companies.length}곳</strong></article><article><span>무료체험</span><strong>{trialDays}일</strong></article></section>
+    <section className="hero"><p>오늘 현황</p><h1>{companies.length ? `오늘 총 ${mealSummary.total}명이 식사했습니다` : "거래처를 먼저 등록해 주세요"}</h1><p>{companies.length ? "키오스크에 입력된 식수 현황을 자동으로 확인합니다." : "사장님이 업체별 PIN을 부여하면 직원들이 키오스크에서 PIN으로 식수를 입력할 수 있습니다."}</p></section>
+    <section className="cards"><article><span>오늘 중식</span><strong>{mealSummary.lunch}명</strong></article><article><span>오늘 석식</span><strong>{mealSummary.dinner}명</strong></article><article><span>등록 거래처</span><strong>{companies.length}곳</strong></article><article><span>무료체험</span><strong>{trialDays}일</strong></article></section>
+
+    <section className="company-section">
+      <div className="section-head"><div><h2>오늘 업체별 식수 현황</h2><p>{lastUpdated ? `최근 확인 ${lastUpdated.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })} · 약 15초마다 자동 갱신` : "오늘 등록된 식수를 확인합니다."}</p></div><button className="btn secondary" onClick={() => loadTodayMeals(restaurant.id)}>새로고침</button></div>
+      <div className="company-list">{mealSummary.rows.length === 0 ? <div className="empty-state"><strong>오늘 등록된 식수가 없습니다.</strong><span>키오스크에서 식수를 등록하면 이곳에 표시됩니다.</span></div> : mealSummary.rows.map((row) => <article key={row.id}><div><strong>{row.name}</strong><span>{new Date(row.lastTime).toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })} 최근 입력</span></div><div><span>중식</span><strong>{row.lunch}명</strong></div><div><span>석식</span><strong>{row.dinner}명</strong></div><div><span>합계</span><strong>{row.total}명</strong></div></article>)}</div>
+    </section>
+
     <section className="company-section">
       <div className="section-head"><div><h2>거래처 관리</h2><p>식당 사장님이 거래처와 식수 입력용 PIN을 관리합니다.</p></div><div className="section-actions">{restaurant?.id && <a className="btn secondary" href={`/kiosk?r=${restaurant.id}`} target="_blank" rel="noreferrer">키오스크 화면 열기</a>}<button className="btn primary" onClick={() => { setMessage(""); setShowCompanyForm(!showCompanyForm); }}>{showCompanyForm ? "닫기" : "+ 거래처 등록"}</button></div></div>
       {message && <p className={message.includes("등록되었습니다") ? "notice" : "error"}>{message}</p>}
