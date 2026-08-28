@@ -21,6 +21,12 @@ export default function DashboardPage() {
   const [message, setMessage] = useState("");
   const [upgradeNotice, setUpgradeNotice] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
+  const [editRecord, setEditRecord] = useState(null);
+  const [editMealType, setEditMealType] = useState("lunch");
+  const [editHeadcount, setEditHeadcount] = useState(1);
+  const [editReason, setEditReason] = useState("");
+  const [recordActionBusy, setRecordActionBusy] = useState(false);
+  const [recordMessage, setRecordMessage] = useState("");
   const [form, setForm] = useState({ company_no: "", name: "", company_pin: "", lunch_price: "", dinner_price: "", contact_name: "", contact_email: "" });
 
   async function loadTodayMeals(restaurantId) {
@@ -29,8 +35,9 @@ export default function DashboardPage() {
     const { start, end } = getTodayRange();
     const { data } = await supabase
       .from("meal_records")
-      .select("id,company_id,meal_type,headcount,occurred_at")
+      .select("id,company_id,meal_type,headcount,occurred_at,cancelled_at")
       .eq("restaurant_id", restaurantId)
+      .is("cancelled_at", null)
       .gte("occurred_at", start)
       .lt("occurred_at", end)
       .order("occurred_at", { ascending: false });
@@ -98,8 +105,54 @@ export default function DashboardPage() {
     setSaving(false);
   }
 
+  function openEdit(record) {
+    setRecordMessage("");
+    setEditRecord(record);
+    setEditMealType(record.meal_type);
+    setEditHeadcount(Number(record.headcount || 1));
+    setEditReason("");
+  }
+
+  async function saveMealEdit(e) {
+    e.preventDefault();
+    if (!editRecord || editHeadcount < 1) return;
+    setRecordActionBusy(true);
+    setRecordMessage("");
+    const supabase = createClient();
+    const { error } = await supabase.rpc("update_meal_record", {
+      p_record_id: editRecord.id,
+      p_meal_type: editMealType,
+      p_headcount: Number(editHeadcount),
+      p_reason: editReason.trim() || null,
+    });
+    if (error) setRecordMessage(error.message || "수정 중 오류가 발생했습니다.");
+    else {
+      setEditRecord(null);
+      setRecordMessage("식수 입력을 수정했습니다.");
+      await loadTodayMeals(restaurant.id);
+    }
+    setRecordActionBusy(false);
+  }
+
+  async function cancelMealRecord(record) {
+    const companyName = companies.find((c) => c.id === record.company_id)?.name || "기타 손님";
+    if (!window.confirm(`${companyName}의 ${record.meal_type === "lunch" ? "중식" : "석식"} ${record.headcount}명 입력을 취소할까요?`)) return;
+    const reason = window.prompt("취소 사유를 입력해 주세요. (선택)", "입력 오류") ?? "";
+    setRecordActionBusy(true);
+    setRecordMessage("");
+    const supabase = createClient();
+    const { error } = await supabase.rpc("cancel_meal_record", { p_record_id: record.id, p_reason: reason.trim() || null });
+    if (error) setRecordMessage(error.message || "취소 중 오류가 발생했습니다.");
+    else {
+      setRecordMessage("식수 입력을 취소했습니다. 기록은 변경 이력에 보관됩니다.");
+      await loadTodayMeals(restaurant.id);
+    }
+    setRecordActionBusy(false);
+  }
+
+  const companyNameMap = useMemo(() => new Map(companies.map((c) => [c.id, c.name])), [companies]);
+
   const mealSummary = useMemo(() => {
-    const companyMap = new Map(companies.map((c) => [c.id, c.name]));
     let lunch = 0;
     let dinner = 0;
     const rows = new Map();
@@ -110,7 +163,7 @@ export default function DashboardPage() {
       if (record.meal_type === "dinner") dinner += count;
 
       const key = record.company_id || "guest";
-      if (!rows.has(key)) rows.set(key, { id: key, name: record.company_id ? (companyMap.get(record.company_id) || "등록 업체") : "기타 손님", lunch: 0, dinner: 0, total: 0, lastTime: record.occurred_at });
+      if (!rows.has(key)) rows.set(key, { id: key, name: record.company_id ? (companyNameMap.get(record.company_id) || "등록 업체") : "기타 손님", lunch: 0, dinner: 0, total: 0, lastTime: record.occurred_at });
       const row = rows.get(key);
       if (record.meal_type === "lunch") row.lunch += count;
       if (record.meal_type === "dinner") row.dinner += count;
@@ -119,7 +172,7 @@ export default function DashboardPage() {
     });
 
     return { lunch, dinner, total: lunch + dinner, rows: Array.from(rows.values()).sort((a, b) => b.total - a.total) };
-  }, [mealRecords, companies]);
+  }, [mealRecords, companyNameMap]);
 
   if (loading) return <main className="center-shell"><div className="form-card"><p className="helper">식당 정보를 불러오고 있습니다...</p></div></main>;
   const now = new Date(); const end = restaurant?.trial_ends_at ? new Date(restaurant.trial_ends_at) : null; const trialDays = end ? Math.max(0, Math.ceil((end - now) / 86400000)) : 0;
@@ -140,6 +193,17 @@ export default function DashboardPage() {
     </section>
 
     <section className="company-section">
+      <div className="section-head"><div><h2>오늘 식수 입력 내역</h2><p>잘못 입력된 식수는 여기에서 수정하거나 취소할 수 있습니다.</p></div></div>
+      {recordMessage && <p className={recordMessage.includes("오류") || recordMessage.includes("function") ? "error" : "notice"}>{recordMessage}</p>}
+      <div className="meal-record-list">{mealRecords.length === 0 ? <div className="empty-state"><strong>수정할 식수 기록이 없습니다.</strong></div> : mealRecords.map((record) => <article key={record.id}>
+        <div><strong>{record.company_id ? (companyNameMap.get(record.company_id) || "등록 업체") : "기타 손님"}</strong><span>{new Date(record.occurred_at).toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })}</span></div>
+        <div><span>식사</span><strong>{record.meal_type === "lunch" ? "중식" : "석식"}</strong></div>
+        <div><span>인원</span><strong>{record.headcount}명</strong></div>
+        <div className="record-actions"><button className="record-edit" onClick={() => openEdit(record)} disabled={recordActionBusy}>수정</button><button className="record-cancel" onClick={() => cancelMealRecord(record)} disabled={recordActionBusy}>취소</button></div>
+      </article>)}</div>
+    </section>
+
+    <section className="company-section">
       <div className="section-head"><div><h2>거래처 관리</h2><p>식당 사장님이 거래처와 식수 입력용 PIN을 관리합니다.</p></div><div className="section-actions">{restaurant?.id && <a className="btn secondary" href={`/kiosk?r=${restaurant.id}`} target="_blank" rel="noreferrer">키오스크 화면 열기</a>}<button className="btn primary" onClick={() => { setMessage(""); setShowCompanyForm(!showCompanyForm); }}>{showCompanyForm ? "닫기" : "+ 거래처 등록"}</button></div></div>
       {message && <p className={message.includes("등록되었습니다") ? "notice" : "error"}>{message}</p>}
       {showCompanyForm && <form className="company-form" onSubmit={saveCompany}>
@@ -151,10 +215,14 @@ export default function DashboardPage() {
       </form>}
       <div className="company-list">{companies.length === 0 ? <div className="empty-state"><strong>아직 등록된 거래처가 없습니다.</strong><span>위의 거래처 등록 버튼을 눌러 첫 업체를 등록해 주세요.</span></div> : companies.map((c) => <article key={c.id}><div><strong>{c.name}</strong><span>업체번호 {c.company_no}</span></div><div><span>식수 PIN</span><strong>설정됨</strong></div><div><span>중식</span><strong>{Number(c.lunch_price).toLocaleString()}원</strong></div><div><span>석식</span><strong>{Number(c.dinner_price).toLocaleString()}원</strong></div></article>)}</div>
     </section>
+
     <section className="company-section premium-section">
       <div className="section-head"><div><h2>업그레이드 기능</h2><p>한끼장부를 더 편리하게 사용할 수 있는 추가 기능입니다.</p></div></div>
       <div className="premium-grid">{premiumFeatures.map((f) => <button key={f.title} className="premium-card" onClick={() => setUpgradeNotice(f)}><span className="premium-icon">{f.icon}</span><div><strong>{f.title}</strong><p>{f.text}</p></div><b>추가 기능</b></button>)}</div>
     </section>
+
+    {editRecord && <div className="modal-backdrop" onClick={() => !recordActionBusy && setEditRecord(null)}><form className="meal-edit-modal" onSubmit={saveMealEdit} onClick={(e) => e.stopPropagation()}><h2>식수 입력 수정</h2><p>{editRecord.company_id ? (companyNameMap.get(editRecord.company_id) || "등록 업체") : "기타 손님"}</p><label>식사 구분<select value={editMealType} onChange={(e) => setEditMealType(e.target.value)}><option value="lunch">중식</option><option value="dinner">석식</option></select></label><label>인원<input type="number" min="1" max="999" value={editHeadcount} onChange={(e) => setEditHeadcount(Number(e.target.value))} required /></label><label>수정 사유<input value={editReason} onChange={(e) => setEditReason(e.target.value)} placeholder="예) 인원 오입력" /></label><div className="modal-actions"><button type="button" className="btn secondary" onClick={() => setEditRecord(null)} disabled={recordActionBusy}>닫기</button><button className="btn primary" disabled={recordActionBusy}>{recordActionBusy ? "저장 중..." : "수정 저장"}</button></div></form></div>}
+
     {upgradeNotice && <div className="modal-backdrop" onClick={() => setUpgradeNotice(null)}><div className="upgrade-modal" onClick={(e) => e.stopPropagation()}><span className="premium-icon">{upgradeNotice.icon}</span><h2>{upgradeNotice.title}</h2><p>{upgradeNotice.text}</p><div className="upgrade-note">이 기능은 추가 결제가 필요한 업그레이드 기능입니다.</div><button className="btn primary" onClick={() => setUpgradeNotice(null)}>확인</button></div></div>}
   </main>;
 }
