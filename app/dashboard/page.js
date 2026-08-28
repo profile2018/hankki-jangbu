@@ -10,6 +10,7 @@ export default function DashboardPage() {
   const [showCompanyForm, setShowCompanyForm] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [upgradeNotice, setUpgradeNotice] = useState(null);
   const [form, setForm] = useState({ company_no: "", name: "", company_pin: "", lunch_price: "", dinner_price: "", contact_name: "", contact_email: "" });
 
   useEffect(() => {
@@ -33,28 +34,14 @@ export default function DashboardPage() {
   }, []);
 
   async function logout() { const supabase = createClient(); await supabase.auth.signOut(); window.location.replace("/"); }
-  function change(e) {
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: name === "company_pin" ? value.replace(/\D/g, "").slice(0, 4) : value });
-  }
+  function change(e) { const { name, value } = e.target; setForm({ ...form, [name]: name === "company_pin" ? value.replace(/\D/g, "").slice(0, 4) : value }); }
 
   async function saveCompany(e) {
-    e.preventDefault();
-    setMessage("");
+    e.preventDefault(); setMessage("");
     if (!/^\d{4}$/.test(form.company_pin)) { setMessage("업체 PIN은 숫자 4자리로 입력해 주세요."); return; }
     setSaving(true);
     const supabase = createClient();
-    const { data, error } = await supabase.rpc("create_company_with_pin", {
-      p_restaurant_id: restaurant.id,
-      p_company_no: form.company_no.trim(),
-      p_name: form.name.trim(),
-      p_pin: form.company_pin,
-      p_lunch_price: Number(form.lunch_price || 0),
-      p_dinner_price: Number(form.dinner_price || 0),
-      p_contact_name: form.contact_name.trim() || null,
-      p_contact_email: form.contact_email.trim() || null
-    });
-
+    const { error } = await supabase.rpc("create_company_with_pin", { p_restaurant_id: restaurant.id, p_company_no: form.company_no.trim(), p_name: form.name.trim(), p_pin: form.company_pin, p_lunch_price: Number(form.lunch_price || 0), p_dinner_price: Number(form.dinner_price || 0), p_contact_name: form.contact_name.trim() || null, p_contact_email: form.contact_email.trim() || null });
     if (error) {
       const text = error.message || "";
       if (text.toLowerCase().includes("duplicate") && text.toLowerCase().includes("pin")) setMessage("이미 사용 중인 업체 PIN입니다. 다른 번호를 지정해 주세요.");
@@ -65,16 +52,18 @@ export default function DashboardPage() {
       setCompanies(companyRows || []);
       const issuedPin = form.company_pin;
       setForm({ company_no: "", name: "", company_pin: "", lunch_price: String(restaurant.default_lunch_price ?? 0), dinner_price: String(restaurant.default_dinner_price ?? 0), contact_name: "", contact_email: "" });
-      setMessage(`거래처가 등록되었습니다. 업체에 안내할 PIN은 ${issuedPin} 입니다.`);
-      setShowCompanyForm(false);
+      setMessage(`거래처가 등록되었습니다. 업체에 안내할 PIN은 ${issuedPin} 입니다.`); setShowCompanyForm(false);
     }
     setSaving(false);
   }
 
   if (loading) return <main className="center-shell"><div className="form-card"><p className="helper">식당 정보를 불러오고 있습니다...</p></div></main>;
-  const now = new Date();
-  const end = restaurant?.trial_ends_at ? new Date(restaurant.trial_ends_at) : null;
-  const trialDays = end ? Math.max(0, Math.ceil((end - now) / 86400000)) : 0;
+  const now = new Date(); const end = restaurant?.trial_ends_at ? new Date(restaurant.trial_ends_at) : null; const trialDays = end ? Math.max(0, Math.ceil((end - now) / 86400000)) : 0;
+  const premiumFeatures = [
+    { icon: "📷", title: "식자재 매입관리", text: "거래명세서를 촬영해 거래처·품목·금액을 자동 등록합니다." },
+    { icon: "📈", title: "매입·경영 분석", text: "식자재 매입과 식수 매출을 비교해 월별 경영 현황을 분석합니다." },
+    { icon: "🧾", title: "전자세금계산서 발행", text: "월말 정산내역을 바탕으로 전자세금계산서 발행을 지원합니다." }
+  ];
 
   return <main className="dashboard-shell">
     <header className="topbar"><div><strong>한끼장부</strong><span>{restaurant?.name || "사장님 관리"}</span></div><button onClick={logout}>로그아웃</button></header>
@@ -92,5 +81,10 @@ export default function DashboardPage() {
       </form>}
       <div className="company-list">{companies.length === 0 ? <div className="empty-state"><strong>아직 등록된 거래처가 없습니다.</strong><span>위의 거래처 등록 버튼을 눌러 첫 업체를 등록해 주세요.</span></div> : companies.map((c) => <article key={c.id}><div><strong>{c.name}</strong><span>업체번호 {c.company_no}</span></div><div><span>식수 PIN</span><strong>설정됨</strong></div><div><span>중식</span><strong>{Number(c.lunch_price).toLocaleString()}원</strong></div><div><span>석식</span><strong>{Number(c.dinner_price).toLocaleString()}원</strong></div></article>)}</div>
     </section>
+    <section className="company-section premium-section">
+      <div className="section-head"><div><h2>업그레이드 기능</h2><p>한끼장부를 더 편리하게 사용할 수 있는 추가 기능입니다.</p></div></div>
+      <div className="premium-grid">{premiumFeatures.map((f) => <button key={f.title} className="premium-card" onClick={() => setUpgradeNotice(f)}><span className="premium-icon">{f.icon}</span><div><strong>{f.title}</strong><p>{f.text}</p></div><b>추가 기능</b></button>)}</div>
+    </section>
+    {upgradeNotice && <div className="modal-backdrop" onClick={() => setUpgradeNotice(null)}><div className="upgrade-modal" onClick={(e) => e.stopPropagation()}><span className="premium-icon">{upgradeNotice.icon}</span><h2>{upgradeNotice.title}</h2><p>{upgradeNotice.text}</p><div className="upgrade-note">이 기능은 추가 결제가 필요한 업그레이드 기능입니다.</div><button className="btn primary" onClick={() => setUpgradeNotice(null)}>확인</button></div></div>}
   </main>;
 }
