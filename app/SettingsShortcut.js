@@ -7,21 +7,24 @@ export default function SettingsShortcut(){
   const[target,setTarget]=useState(null);
 
   useEffect(()=>{
-    const update=()=>{
+    const findTarget=()=>{
       const path=window.location.pathname.replace(/\/+$/,"")||"/";
       if(path!=="/dashboard"){
         setTarget(null);
         return;
       }
-      setTarget(document.querySelector(".topbar-actions"));
+      const el=document.querySelector(".topbar-actions");
+      if(el)setTarget(el);
     };
 
-    update();
-    const timer=setTimeout(update,50);
-    window.addEventListener("popstate",update);
+    findTarget();
+    const observer=new MutationObserver(findTarget);
+    observer.observe(document.body,{childList:true,subtree:true});
+    window.addEventListener("popstate",findTarget);
+
     return()=>{
-      clearTimeout(timer);
-      window.removeEventListener("popstate",update);
+      observer.disconnect();
+      window.removeEventListener("popstate",findTarget);
     };
   },[]);
 
