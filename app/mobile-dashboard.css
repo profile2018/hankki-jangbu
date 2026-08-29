@@ -1,7 +1,7 @@
 @media(max-width:680px){
-  .dashboard-shell{padding:18px 16px 40px;background:#f5f7fb}
+  .dashboard-shell{padding:18px 16px 40px;background:#f5f7fb;display:flex;flex-direction:column}
   .dashboard-shell>.topbar{display:none!important}
-  .mobile-dashboard-nav{display:block;margin-bottom:20px}
+  .mobile-dashboard-nav{display:block;order:-10;margin-bottom:20px}
   .mobile-dashboard-title{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:4px 0 18px}
   .mobile-dashboard-title>div{display:grid;gap:2px}
   .mobile-dashboard-title strong{font-size:30px;letter-spacing:-1.1px;color:#102a52}
