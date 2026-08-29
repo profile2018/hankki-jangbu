@@ -3,7 +3,9 @@ import "./settlement-extra.css";
 import "./modal-scroll-fix.css";
 import "./kiosk-keypad.css";
 import "./update-notice.css";
+import "./settings-extra.css";
 import UpdateNotice from "./UpdateNotice";
+import SettingsShortcut from "./SettingsShortcut";
 
 export const metadata = {
   title: "한끼장부",
@@ -38,6 +40,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         {children}
+        <SettingsShortcut />
         <UpdateNotice />
       </body>
     </html>
