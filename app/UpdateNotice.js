@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const VERSION = "1.1.1";
+const VERSION = "1.2.0";
 const STORAGE_KEY = "hankki-jangbu-version";
 
 export default function UpdateNotice() {
@@ -37,9 +37,9 @@ export default function UpdateNotice() {
         <h2 id="update-title">한끼장부가 업데이트되었습니다!</h2>
         <p className="update-lead">더 편리한 식수 관리를 위해 최신 버전을 사용해 주세요.</p>
         <div className="update-items">
-          <div><strong>정산 이메일 안내 개선</strong><span>발송 성공·실패 안내가 정산서 밖 중앙 팝업으로 표시되도록 개선했습니다.</span></div>
-          <div><strong>PDF 이메일 발송 안정화</strong><span>발송 진행 상태를 한눈에 확인할 수 있도록 정리했습니다.</span></div>
-          <div><strong>정산서 화면 정리</strong><span>안내 문구가 본문 레이아웃을 밀지 않도록 분리했습니다.</span></div>
+          <div><strong>설정 메뉴 추가</strong><span>식당 정보, 입금계좌, 기본 식대와 키오스크 설정을 한 곳에서 관리합니다.</span></div>
+          <div><strong>계정 정보 확인</strong><span>현재 로그인 계정과 식당 내 권한을 설정 화면에서 확인할 수 있습니다.</span></div>
+          <div><strong>정산 준비 강화</strong><span>정산서에 연결할 식당·계좌 정보를 저장할 기반을 추가했습니다.</span></div>
         </div>
         <button type="button" className="update-now" onClick={applyUpdate}>지금 업데이트</button>
         <button type="button" className="update-later" onClick={later}>나중에 하기</button>
