@@ -4,8 +4,10 @@ import "./modal-scroll-fix.css";
 import "./kiosk-keypad.css";
 import "./update-notice.css";
 import "./settings-extra.css";
+import "./mobile-dashboard.css";
 import UpdateNotice from "./UpdateNotice";
 import SettingsShortcut from "./SettingsShortcut";
+import MobileDashboardNav from "./MobileDashboardNav";
 
 export const metadata = {
   title: "한끼장부",
@@ -41,6 +43,7 @@ export default function RootLayout({ children }) {
       <body>
         {children}
         <SettingsShortcut />
+        <MobileDashboardNav />
         <UpdateNotice />
       </body>
     </html>
