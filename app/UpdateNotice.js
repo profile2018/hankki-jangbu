@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const VERSION = "1.3.1";
+const VERSION = "1.3.2";
 const STORAGE_KEY = "hankki-jangbu-version";
 
 export default function UpdateNotice() {
@@ -16,9 +16,7 @@ export default function UpdateNotice() {
   }, []);
 
   function applyUpdate() {
-    try {
-      localStorage.setItem(STORAGE_KEY, VERSION);
-    } catch {}
+    try { localStorage.setItem(STORAGE_KEY, VERSION); } catch {}
     const url = new URL(window.location.href);
     url.searchParams.set("_appv", VERSION);
     url.searchParams.set("_refresh", String(Date.now()));
@@ -33,11 +31,11 @@ export default function UpdateNotice() {
       <section className="update-card">
         <div className="update-badge">새 버전 v{VERSION}</div>
         <h2 id="update-title">한끼장부가 업데이트되었습니다!</h2>
-        <p className="update-lead">운영자용 무료체험 관리 기능이 추가되었습니다.</p>
+        <p className="update-lead">운영자용 식당 보관·복구 기능을 개선했습니다.</p>
         <div className="update-items">
-          <div><strong>체험기간 연장</strong><span>식당별로 +7일, +15일, +30일 또는 직접 일수를 입력해 연장할 수 있습니다.</span></div>
-          <div><strong>연장 사유 기록</strong><span>설치 지원이나 서비스 보상 등 연장 사유를 함께 남길 수 있습니다.</span></div>
-          <div><strong>연장 이력 확인</strong><span>기존 종료일과 새 종료일, 연장 일수를 운영자 화면에서 확인합니다.</span></div>
+          <div><strong>가입 식당 목록 정리</strong><span>삭제/보관 처리한 식당은 일반 가입 식당 목록에서 제외됩니다.</span></div>
+          <div><strong>보관된 식당 분리</strong><span>보관된 식당을 별도 영역에서 확인할 수 있습니다.</span></div>
+          <div><strong>안전한 복구</strong><span>보관된 식당은 데이터 삭제 없이 언제든 다시 복구할 수 있습니다.</span></div>
         </div>
         <button type="button" className="update-now" onClick={applyUpdate}>지금 업데이트</button>
         <button type="button" className="update-later" onClick={later}>나중에 하기</button>
