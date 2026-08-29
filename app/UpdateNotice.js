@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const VERSION = "1.3.0";
+const VERSION = "1.3.1";
 const STORAGE_KEY = "hankki-jangbu-version";
 
 export default function UpdateNotice() {
@@ -25,10 +25,7 @@ export default function UpdateNotice() {
     window.location.replace(url.toString());
   }
 
-  function later() {
-    setOpen(false);
-  }
-
+  function later() { setOpen(false); }
   if (!open) return null;
 
   return (
@@ -36,11 +33,11 @@ export default function UpdateNotice() {
       <section className="update-card">
         <div className="update-badge">새 버전 v{VERSION}</div>
         <h2 id="update-title">한끼장부가 업데이트되었습니다!</h2>
-        <p className="update-lead">서비스 운영 기능이 추가되었습니다.</p>
+        <p className="update-lead">운영자용 무료체험 관리 기능이 추가되었습니다.</p>
         <div className="update-items">
-          <div><strong>운영자 관리 추가</strong><span>슈퍼관리자 계정에서 가입 식당과 이용 상태를 확인할 수 있습니다.</span></div>
-          <div><strong>식당 현황 요약</strong><span>전체 식당, 체험 중, 정상 이용, 확인 필요 식당을 한눈에 확인합니다.</span></div>
-          <div><strong>관리 권한 강화</strong><span>일반 식당 계정은 운영자 관리 화면에 접근할 수 없도록 분리했습니다.</span></div>
+          <div><strong>체험기간 연장</strong><span>식당별로 +7일, +15일, +30일 또는 직접 일수를 입력해 연장할 수 있습니다.</span></div>
+          <div><strong>연장 사유 기록</strong><span>설치 지원이나 서비스 보상 등 연장 사유를 함께 남길 수 있습니다.</span></div>
+          <div><strong>연장 이력 확인</strong><span>기존 종료일과 새 종료일, 연장 일수를 운영자 화면에서 확인합니다.</span></div>
         </div>
         <button type="button" className="update-now" onClick={applyUpdate}>지금 업데이트</button>
         <button type="button" className="update-later" onClick={later}>나중에 하기</button>
