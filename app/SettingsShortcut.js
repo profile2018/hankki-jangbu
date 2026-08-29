@@ -5,7 +5,10 @@ import {useEffect,useState} from "react";
 export default function SettingsShortcut(){
   const[show,setShow]=useState(false);
   useEffect(()=>{
-    const update=()=>setShow(window.location.pathname==="/dashboard");
+    const update=()=>{
+      const path=window.location.pathname.replace(/\/+$/,"")||"/";
+      setShow(path==="/dashboard");
+    };
     update();
     window.addEventListener("popstate",update);
     return()=>window.removeEventListener("popstate",update);
