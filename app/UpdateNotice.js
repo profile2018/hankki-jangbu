@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const VERSION = "1.3.4";
+const VERSION = "1.3.5";
 const STORAGE_KEY = "hankki-jangbu-version";
 
 export default function UpdateNotice() {
@@ -31,11 +31,11 @@ export default function UpdateNotice() {
       <section className="update-card">
         <div className="update-badge">새 버전 v{VERSION}</div>
         <h2 id="update-title">한끼장부가 업데이트되었습니다!</h2>
-        <p className="update-lead">거래처별 정산 목록을 더 간결하게 개선했습니다.</p>
+        <p className="update-lead">모바일 월별 정산 화면의 이동 동선을 개선했습니다.</p>
         <div className="update-items">
-          <div><strong>정산 목록 간소화</strong><span>업체명, 총 식수, 총 청구금액만 먼저 보여줍니다.</span></div>
-          <div><strong>클릭형 상세보기</strong><span>업체를 누르면 중식·석식, 담당자 정보와 정산서 발송 기능이 펼쳐집니다.</span></div>
-          <div><strong>거래처 증가 대비</strong><span>업체가 많아져도 한눈에 비교하기 쉽도록 목록을 압축했습니다.</span></div>
+          <div><strong>홈으로 버튼 추가</strong><span>스마트폰 월별 정산 화면에서 바로 홈으로 돌아갈 수 있습니다.</span></div>
+          <div><strong>모바일 이동 편의 개선</strong><span>정산 화면을 확인한 뒤 뒤로가기 없이 주요 화면으로 이동할 수 있습니다.</span></div>
+          <div><strong>기존 정산 화면 유지</strong><span>정산 월 선택과 거래처별 상세보기 구성은 그대로 유지됩니다.</span></div>
         </div>
         <button type="button" className="update-now" onClick={applyUpdate}>지금 업데이트</button>
         <button type="button" className="update-later" onClick={later}>나중에 하기</button>
