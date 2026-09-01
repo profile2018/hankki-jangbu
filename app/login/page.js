@@ -34,6 +34,7 @@ export default function LoginPage() {
         <label>비밀번호<input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} required /></label>
         {message && <p className="error">{message}</p>}
         <button className="btn primary" disabled={loading}>{loading ? "로그인 중..." : "로그인"}</button>
+        <p className="helper"><Link href="/reset-password">비밀번호를 잊으셨나요?</Link></p>
         <p className="helper">처음이신가요? <Link href="/signup">회원가입</Link></p>
       </form>
     </main>
