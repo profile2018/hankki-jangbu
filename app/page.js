@@ -1,6 +1,24 @@
+"use client";
+
+import { useEffect } from "react";
 import Link from "next/link";
 
 export default function Home() {
+  useEffect(() => {
+    const search = window.location.search || "";
+    const hash = window.location.hash || "";
+    const params = new URLSearchParams(search);
+    const isRecovery =
+      params.has("code") ||
+      params.get("type") === "recovery" ||
+      hash.includes("type=recovery") ||
+      hash.includes("access_token=");
+
+    if (isRecovery) {
+      window.location.replace(`/reset-password${search}${hash}`);
+    }
+  }, []);
+
   return (
     <main className="center-shell">
       <section className="brand-card">
