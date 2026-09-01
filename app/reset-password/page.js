@@ -5,7 +5,7 @@ import Link from "next/link";
 import { createClient } from "../../lib/supabase/client";
 
 export default function ResetPasswordPage() {
-  const [mode, setMode] = useState("request");
+  const [mode, setMode] = useState("checking");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -13,17 +13,54 @@ export default function ResetPasswordPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    let alive = true;
     const supabase = createClient();
 
-    supabase.auth.getSession().then(({ data }) => {
-      if (data?.session && window.location.hash) setMode("update");
-    });
+    async function prepareRecovery() {
+      try {
+        const url = new URL(window.location.href);
+        const code = url.searchParams.get("code");
+        const type = url.searchParams.get("type");
+        const hashParams = new URLSearchParams((window.location.hash || "").replace(/^#/, ""));
+        const hashType = hashParams.get("type");
+
+        if (code) {
+          const { error } = await supabase.auth.exchangeCodeForSession(code);
+          if (error) throw error;
+          if (!alive) return;
+          setMode("update");
+          return;
+        }
+
+        if (type === "recovery" || hashType === "recovery" || hashParams.get("access_token")) {
+          const { data, error } = await supabase.auth.getSession();
+          if (error) throw error;
+          if (!alive) return;
+          setMode(data?.session ? "update" : "request");
+          return;
+        }
+
+        const { data } = await supabase.auth.getSession();
+        if (!alive) return;
+        setMode(data?.session && hashType === "recovery" ? "update" : "request");
+      } catch (error) {
+        if (!alive) return;
+        setMessage("재설정 링크가 만료되었거나 올바르지 않습니다. 재설정 메일을 다시 요청해 주세요.");
+        setMode("request");
+      }
+    }
+
+    prepareRecovery();
 
     const { data: listener } = supabase.auth.onAuthStateChange((event) => {
+      if (!alive) return;
       if (event === "PASSWORD_RECOVERY") setMode("update");
     });
 
-    return () => listener?.subscription?.unsubscribe();
+    return () => {
+      alive = false;
+      listener?.subscription?.unsubscribe();
+    };
   }, []);
 
   async function sendResetEmail(event) {
@@ -60,13 +97,18 @@ export default function ResetPasswordPage() {
       const supabase = createClient();
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
-      setMessage("비밀번호가 변경되었습니다. 잠시 후 로그인 화면으로 이동합니다.");
-      setTimeout(() => { window.location.href = "/login"; }, 1400);
+      await supabase.auth.signOut();
+      setMessage("비밀번호가 변경되었습니다. 새 비밀번호로 로그인해 주세요.");
+      setTimeout(() => { window.location.replace("/login"); }, 1500);
     } catch (error) {
       setMessage(error.message || "비밀번호 변경에 실패했습니다. 재설정 메일을 다시 요청해 주세요.");
     } finally {
       setLoading(false);
     }
+  }
+
+  if (mode === "checking") {
+    return <main className="center-shell"><div className="form-card"><p className="helper">비밀번호 재설정 정보를 확인하는 중...</p></div></main>;
   }
 
   if (mode === "update") {
