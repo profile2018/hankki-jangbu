@@ -2,6 +2,7 @@ import "./globals.css";
 import "./settlement-extra.css";
 import "./modal-scroll-fix.css";
 import "./kiosk-keypad.css";
+import "./kiosk-pin-v142.css";
 import "./update-notice.css";
 import "./settings-extra.css";
 import "./mobile-dashboard.css";
