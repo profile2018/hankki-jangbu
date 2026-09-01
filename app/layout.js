@@ -8,6 +8,7 @@ import "./mobile-dashboard.css";
 import UpdateNotice from "./UpdateNotice";
 import SettingsShortcut from "./SettingsShortcut";
 import MobileDashboardNav from "./MobileDashboardNav";
+import CompanyArchiveManager from "./CompanyArchiveManager";
 
 export const metadata = {
   title: "한끼장부",
@@ -44,6 +45,7 @@ export default function RootLayout({ children }) {
         {children}
         <SettingsShortcut />
         <MobileDashboardNav />
+        <CompanyArchiveManager />
         <UpdateNotice />
       </body>
     </html>
