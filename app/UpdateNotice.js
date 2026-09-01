@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const VERSION = "1.4.0";
+const VERSION = "1.4.1";
 const STORAGE_KEY = "hankki-jangbu-version";
 
 export default function UpdateNotice() {
@@ -31,11 +31,11 @@ export default function UpdateNotice() {
       <section className="update-card">
         <div className="update-badge">새 버전 v{VERSION}</div>
         <h2 id="update-title">한끼장부가 업데이트되었습니다!</h2>
-        <p className="update-lead">비밀번호 재설정 메일의 링크를 누르면 새 비밀번호 설정 화면으로 바로 연결되도록 수정했습니다.</p>
+        <p className="update-lead">비밀번호 재설정 화면에서 정상 링크인데도 만료 안내가 함께 보이던 문제를 수정했습니다.</p>
         <div className="update-items">
-          <div><strong>재설정 링크 연결 수정</strong><span>메일 링크가 첫 화면으로 열려도 재설정 정보를 감지해 새 비밀번호 화면으로 이동합니다.</span></div>
-          <div><strong>복구 세션 처리 강화</strong><span>Supabase 재설정 코드와 복구 세션을 확인해 안전하게 비밀번호를 변경합니다.</span></div>
-          <div><strong>변경 후 로그인 안내</strong><span>비밀번호 변경이 끝나면 로그아웃 후 새 비밀번호로 로그인하도록 안내합니다.</span></div>
+          <div><strong>잘못된 오류 문구 제거</strong><span>복구 세션이 정상 확인되면 만료 안내를 자동으로 지웁니다.</span></div>
+          <div><strong>재설정 상태 판정 강화</strong><span>링크 처리 중 일시적인 오류가 있어도 유효한 세션이면 새 비밀번호 설정을 계속할 수 있습니다.</span></div>
+          <div><strong>재설정 화면 안정화</strong><span>정상적인 비밀번호 변경 흐름에서는 불필요한 경고가 표시되지 않습니다.</span></div>
         </div>
         <button type="button" className="update-now" onClick={applyUpdate}>지금 업데이트</button>
         <button type="button" className="update-later" onClick={later}>나중에 하기</button>
