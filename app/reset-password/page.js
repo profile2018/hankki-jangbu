@@ -16,6 +16,12 @@ export default function ResetPasswordPage() {
     let alive = true;
     const supabase = createClient();
 
+    function enterUpdateMode() {
+      if (!alive) return;
+      setMessage("");
+      setMode("update");
+    }
+
     async function prepareRecovery() {
       try {
         const url = new URL(window.location.href);
@@ -27,8 +33,7 @@ export default function ResetPasswordPage() {
         if (code) {
           const { error } = await supabase.auth.exchangeCodeForSession(code);
           if (error) throw error;
-          if (!alive) return;
-          setMode("update");
+          enterUpdateMode();
           return;
         }
 
@@ -36,15 +41,31 @@ export default function ResetPasswordPage() {
           const { data, error } = await supabase.auth.getSession();
           if (error) throw error;
           if (!alive) return;
-          setMode(data?.session ? "update" : "request");
+          if (data?.session) {
+            enterUpdateMode();
+          } else {
+            setMessage("재설정 링크가 만료되었거나 올바르지 않습니다. 재설정 메일을 다시 요청해 주세요.");
+            setMode("request");
+          }
           return;
         }
 
         const { data } = await supabase.auth.getSession();
         if (!alive) return;
-        setMode(data?.session && hashType === "recovery" ? "update" : "request");
+        if (data?.session && hashType === "recovery") {
+          enterUpdateMode();
+        } else {
+          setMessage("");
+          setMode("request");
+        }
       } catch (error) {
         if (!alive) return;
+        const { data } = await supabase.auth.getSession();
+        if (!alive) return;
+        if (data?.session) {
+          enterUpdateMode();
+          return;
+        }
         setMessage("재설정 링크가 만료되었거나 올바르지 않습니다. 재설정 메일을 다시 요청해 주세요.");
         setMode("request");
       }
@@ -54,7 +75,7 @@ export default function ResetPasswordPage() {
 
     const { data: listener } = supabase.auth.onAuthStateChange((event) => {
       if (!alive) return;
-      if (event === "PASSWORD_RECOVERY") setMode("update");
+      if (event === "PASSWORD_RECOVERY") enterUpdateMode();
     });
 
     return () => {
