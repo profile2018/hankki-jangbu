@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const VERSION = "1.3.7";
+const VERSION = "1.3.8";
 const STORAGE_KEY = "hankki-jangbu-version";
 
 export default function UpdateNotice() {
@@ -31,11 +31,11 @@ export default function UpdateNotice() {
       <section className="update-card">
         <div className="update-badge">새 버전 v{VERSION}</div>
         <h2 id="update-title">한끼장부가 업데이트되었습니다!</h2>
-        <p className="update-lead">키오스크가 다양한 태블릿 화면 비율에 자동으로 맞춰지도록 개선했습니다.</p>
+        <p className="update-lead">거래가 끝난 거래처를 안전하게 사용중지·보관하고 필요할 때 다시 복구할 수 있습니다.</p>
         <div className="update-items">
-          <div><strong>PIN 화면 자동 최적화</strong><span>가로폭과 세로높이에 맞춰 숫자패드와 글자 크기, 여백을 자동 조정합니다.</span></div>
-          <div><strong>낮은 와이드 화면 대응</strong><span>세로 공간이 좁은 모니터에서는 요소 간격을 줄여 화면 안에 자연스럽게 배치합니다.</span></div>
-          <div><strong>대형 화면 대응</strong><span>큰 터치모니터에서는 지나치게 늘어나지 않도록 적정 최대 폭을 유지합니다.</span></div>
+          <div><strong>거래처 사용중지/보관</strong><span>더 이상 이용하지 않는 거래처를 키오스크에서 숨기고 보관할 수 있습니다.</span></div>
+          <div><strong>기존 기록 안전 보존</strong><span>거래처를 보관해도 과거 식수 입력과 월별 정산 기록은 삭제되지 않습니다.</span></div>
+          <div><strong>거래처 복구</strong><span>보관된 거래처는 언제든 복구하여 다시 사용할 수 있습니다.</span></div>
         </div>
         <button type="button" className="update-now" onClick={applyUpdate}>지금 업데이트</button>
         <button type="button" className="update-later" onClick={later}>나중에 하기</button>
