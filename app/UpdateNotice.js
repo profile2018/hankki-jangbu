@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const VERSION = "1.4.1";
+const VERSION = "1.4.2";
 const STORAGE_KEY = "hankki-jangbu-version";
 
 export default function UpdateNotice() {
@@ -31,11 +31,11 @@ export default function UpdateNotice() {
       <section className="update-card">
         <div className="update-badge">새 버전 v{VERSION}</div>
         <h2 id="update-title">한끼장부가 업데이트되었습니다!</h2>
-        <p className="update-lead">비밀번호 재설정 화면에서 정상 링크인데도 만료 안내가 함께 보이던 문제를 수정했습니다.</p>
+        <p className="update-lead">키오스크 PIN 입력 화면을 더 크고 터치하기 쉽게 개선했습니다.</p>
         <div className="update-items">
-          <div><strong>잘못된 오류 문구 제거</strong><span>복구 세션이 정상 확인되면 만료 안내를 자동으로 지웁니다.</span></div>
-          <div><strong>재설정 상태 판정 강화</strong><span>링크 처리 중 일시적인 오류가 있어도 유효한 세션이면 새 비밀번호 설정을 계속할 수 있습니다.</span></div>
-          <div><strong>재설정 화면 안정화</strong><span>정상적인 비밀번호 변경 흐름에서는 불필요한 경고가 표시되지 않습니다.</span></div>
+          <div><strong>숫자 버튼 확대</strong><span>숫자패드를 더 크고 정사각형에 가깝게 조정해 터치가 편해졌습니다.</span></div>
+          <div><strong>업체 확인 버튼 확대</strong><span>확인 버튼의 높이와 글자를 키워 한눈에 보이고 누르기 쉽게 했습니다.</span></div>
+          <div><strong>안내 문구 간소화</strong><span>불필요한 문구를 제거하고 “업체 PIN번호를 입력하세요.”만 크게 표시합니다.</span></div>
         </div>
         <button type="button" className="update-now" onClick={applyUpdate}>지금 업데이트</button>
         <button type="button" className="update-later" onClick={later}>나중에 하기</button>
