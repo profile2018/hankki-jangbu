@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const VERSION = "1.4.4";
+const VERSION = "1.4.5";
 const STORAGE_KEY = "hankki-jangbu-version";
 
 export default function UpdateNotice() {
@@ -31,11 +31,11 @@ export default function UpdateNotice() {
       <section className="update-card">
         <div className="update-badge">새 버전 v{VERSION}</div>
         <h2 id="update-title">한끼장부가 업데이트되었습니다!</h2>
-        <p className="update-lead">키오스크 안내 문구를 더 쉽고 자연스럽게 정리했습니다.</p>
+        <p className="update-lead">업체 확인 후 식사 선택 화면을 더 크고 누르기 쉽게 개선했습니다.</p>
         <div className="update-items">
-          <div><strong>업체번호 안내로 변경</strong><span>“업체 PIN번호를 입력하세요.” 대신 “업체번호를 입력하세요.”로 표시합니다.</span></div>
-          <div><strong>관련 안내 문구 통일</strong><span>오류 안내와 복귀 문구도 업체번호 기준으로 맞췄습니다.</span></div>
-          <div><strong>기존 기능 유지</strong><span>4자리 입력 방식과 업체 확인 기능은 그대로 사용합니다.</span></div>
+          <div><strong>중식·석식 버튼 세로 확대</strong><span>두 식사 버튼의 높이를 더 키워 손가락으로 누르기 편하게 했습니다.</span></div>
+          <div><strong>업체명 표시 유지</strong><span>업체번호 확인 후에는 상단에 확인된 업체명이 그대로 표시됩니다.</span></div>
+          <div><strong>기존 인원 입력 유지</strong><span>왼쪽 숫자키패드와 오른쪽 대형 등록 버튼 구조는 그대로 유지합니다.</span></div>
         </div>
         <button type="button" className="update-now" onClick={applyUpdate}>지금 업데이트</button>
         <button type="button" className="update-later" onClick={later}>나중에 하기</button>
