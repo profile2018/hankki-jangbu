@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const VERSION = "1.5.1";
+const VERSION = "1.5.2";
 const STORAGE_KEY = "hankki-jangbu-version";
 const CHECK_INTERVAL = 5 * 60 * 1000;
 
@@ -11,6 +11,11 @@ export default function UpdateNotice() {
   const [latestVersion, setLatestVersion] = useState(VERSION);
 
   useEffect(() => {
+    if (window.location.pathname.startsWith("/kiosk")) {
+      setOpen(false);
+      return;
+    }
+
     let timer;
     let stopped = false;
 
@@ -77,15 +82,15 @@ export default function UpdateNotice() {
       <section className="update-card">
         <div className="update-badge">새 버전 v{latestVersion}</div>
         <h2 id="update-title">한끼장부가 업데이트되었습니다!</h2>
-        <p className="update-lead">이제 화면을 새로고침하지 않아도 새 버전을 자동으로 확인하고 업데이트 알림을 표시합니다.</p>
+        <p className="update-lead">키오스크 화면에서는 업데이트 안내를 숨기고, 사장님·관리자 화면에서만 새 버전을 안내합니다.</p>
         <div className="update-items">
-          <div><strong>자동 업데이트 확인</strong><span>앱을 계속 켜둔 상태에서도 약 5분마다 새 버전을 확인합니다.</span></div>
-          <div><strong>화면 복귀 시 즉시 확인</strong><span>다른 창을 사용하다 한끼장부로 돌아오면 새 버전을 바로 확인합니다.</span></div>
-          <div><strong>강제 새로고침 없음</strong><span>식수 입력 중 화면이 갑자기 바뀌지 않도록 사용자가 지금 업데이트를 누를 때만 적용합니다.</span></div>
+          <div><strong>키오스크 팝업 제외</strong><span>식수 입력 중 업데이트 안내가 나타나지 않아 이용 흐름을 방해하지 않습니다.</span></div>
+          <div><strong>관리 화면은 자동 확인</strong><span>대시보드·정산·설정·최고관리자 화면에서는 기존처럼 새 버전을 자동 확인합니다.</span></div>
+          <div><strong>강제 새로고침 없음</strong><span>관리 화면에서도 사용자가 지금 업데이트를 누를 때만 최신 버전으로 전환합니다.</span></div>
         </div>
         <button type="button" className="update-now" onClick={applyUpdate}>지금 업데이트</button>
         <button type="button" className="update-later" onClick={later}>나중에 하기</button>
-        <small>앞으로 새 버전이 배포되면 새로고침 없이 자동으로 알림을 받을 수 있습니다.</small>
+        <small>키오스크는 계속 식수 입력 화면을 유지합니다.</small>
       </section>
     </div>
   );
