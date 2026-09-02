@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const VERSION = "1.4.8";
+const VERSION = "1.4.9";
 const STORAGE_KEY = "hankki-jangbu-version";
 
 export default function UpdateNotice() {
@@ -31,11 +31,11 @@ export default function UpdateNotice() {
       <section className="update-card">
         <div className="update-badge">새 버전 v{VERSION}</div>
         <h2 id="update-title">한끼장부가 업데이트되었습니다!</h2>
-        <p className="update-lead">최고관리자에서 식당별 이용 규모를 월평균 식수로 바로 확인할 수 있습니다.</p>
+        <p className="update-lead">최고관리자 내부 운영 식당과 실제 고객 식당을 분리해 서비스 현황을 더 정확하게 관리합니다.</p>
         <div className="update-items">
-          <div><strong>월평균 식수 표시</strong><span>가입 식당 목록에서 최근 3개월 기준 월평균 식수를 확인합니다.</span></div>
-          <div><strong>식수 상세 현황</strong><span>식당명을 누르면 이번 달, 지난달, 최근 3개월 평균, 이번 달 일평균을 보여줍니다.</span></div>
-          <div><strong>취소 기록 제외</strong><span>취소된 식수는 통계에서 자동 제외해 실제 이용량을 기준으로 집계합니다.</span></div>
+          <div><strong>운영 / 테스트 식당 분리</strong><span>최고관리자 계정의 식당은 일반 가입 식당 목록과 별도로 표시합니다.</span></div>
+          <div><strong>고객 통계 정확도 개선</strong><span>내부 운영 식당은 전체 식당, 체험 중, 정상 이용, 확인 필요 통계에서 제외합니다.</span></div>
+          <div><strong>내부 식당 무료체험 제외</strong><span>운영용 식당에는 체험기간·사용 중단·삭제 관리 대신 식수 현황만 제공합니다.</span></div>
         </div>
         <button type="button" className="update-now" onClick={applyUpdate}>지금 업데이트</button>
         <button type="button" className="update-later" onClick={later}>나중에 하기</button>
