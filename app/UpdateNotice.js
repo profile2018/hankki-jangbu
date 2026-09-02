@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const VERSION = "1.5.2";
+const VERSION = "1.5.3";
 const STORAGE_KEY = "hankki-jangbu-version";
 const CHECK_INTERVAL = 5 * 60 * 1000;
 
@@ -41,23 +41,17 @@ export default function UpdateNotice() {
         if (!response.ok) return;
         const data = await response.json();
         const remoteVersion = String(data?.version || "").trim();
-        if (!stopped && remoteVersion && remoteVersion !== VERSION) {
-          showIfNeeded(remoteVersion);
-        }
+        if (!stopped && remoteVersion && remoteVersion !== VERSION) showIfNeeded(remoteVersion);
       } catch {}
     }
 
     showIfNeeded(VERSION);
     checkLatestVersion();
     timer = window.setInterval(checkLatestVersion, CHECK_INTERVAL);
-
-    const handleVisible = () => {
-      if (document.visibilityState === "visible") checkLatestVersion();
-    };
+    const handleVisible = () => { if (document.visibilityState === "visible") checkLatestVersion(); };
     const handleFocus = () => checkLatestVersion();
     document.addEventListener("visibilitychange", handleVisible);
     window.addEventListener("focus", handleFocus);
-
     return () => {
       stopped = true;
       if (timer) window.clearInterval(timer);
@@ -82,15 +76,15 @@ export default function UpdateNotice() {
       <section className="update-card">
         <div className="update-badge">새 버전 v{latestVersion}</div>
         <h2 id="update-title">한끼장부가 업데이트되었습니다!</h2>
-        <p className="update-lead">키오스크 화면에서는 업데이트 안내를 숨기고, 사장님·관리자 화면에서만 새 버전을 안내합니다.</p>
+        <p className="update-lead">거래처 관리 화면에서 삭제와 복구 기능을 바로 사용할 수 있도록 개선했습니다.</p>
         <div className="update-items">
-          <div><strong>키오스크 팝업 제외</strong><span>식수 입력 중 업데이트 안내가 나타나지 않아 이용 흐름을 방해하지 않습니다.</span></div>
-          <div><strong>관리 화면은 자동 확인</strong><span>대시보드·정산·설정·최고관리자 화면에서는 기존처럼 새 버전을 자동 확인합니다.</span></div>
-          <div><strong>강제 새로고침 없음</strong><span>관리 화면에서도 사용자가 지금 업데이트를 누를 때만 최신 버전으로 전환합니다.</span></div>
+          <div><strong>거래처 삭제 버튼 표시</strong><span>각 거래처 오른쪽에서 수정과 삭제를 바로 선택할 수 있습니다.</span></div>
+          <div><strong>안전한 삭제 방식</strong><span>삭제해도 기존 식수와 정산 기록은 지우지 않고 안전하게 보존합니다.</span></div>
+          <div><strong>삭제 거래처 복구</strong><span>삭제된 거래처는 별도 목록에서 언제든 다시 복구할 수 있습니다.</span></div>
         </div>
         <button type="button" className="update-now" onClick={applyUpdate}>지금 업데이트</button>
         <button type="button" className="update-later" onClick={later}>나중에 하기</button>
-        <small>키오스크는 계속 식수 입력 화면을 유지합니다.</small>
+        <small>키오스크 화면에는 업데이트 팝업이 표시되지 않습니다.</small>
       </section>
     </div>
   );
