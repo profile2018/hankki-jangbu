@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const VERSION = "1.4.2";
+const VERSION = "1.4.3";
 const STORAGE_KEY = "hankki-jangbu-version";
 
 export default function UpdateNotice() {
@@ -31,11 +31,11 @@ export default function UpdateNotice() {
       <section className="update-card">
         <div className="update-badge">새 버전 v{VERSION}</div>
         <h2 id="update-title">한끼장부가 업데이트되었습니다!</h2>
-        <p className="update-lead">키오스크 PIN 입력 화면을 더 크고 터치하기 쉽게 개선했습니다.</p>
+        <p className="update-lead">식수 등록 화면을 손가락으로 더 쉽게 누를 수 있도록 크게 재배치했습니다.</p>
         <div className="update-items">
-          <div><strong>숫자 버튼 확대</strong><span>숫자패드를 더 크고 정사각형에 가깝게 조정해 터치가 편해졌습니다.</span></div>
-          <div><strong>업체 확인 버튼 확대</strong><span>확인 버튼의 높이와 글자를 키워 한눈에 보이고 누르기 쉽게 했습니다.</span></div>
-          <div><strong>안내 문구 간소화</strong><span>불필요한 문구를 제거하고 “업체 PIN번호를 입력하세요.”만 크게 표시합니다.</span></div>
+          <div><strong>중식·석식 버튼 확대</strong><span>식사 선택 버튼을 더 크게 하고 상단에 배치해 바로 누르기 쉽게 했습니다.</span></div>
+          <div><strong>인원 숫자키패드</strong><span>화면 왼쪽 아래에 숫자키패드 형태로 인원수를 빠르게 입력할 수 있습니다.</span></div>
+          <div><strong>대형 등록 버튼</strong><span>오른쪽에 큰 등록 버튼을 배치해 마지막 등록 동작을 편하게 했습니다.</span></div>
         </div>
         <button type="button" className="update-now" onClick={applyUpdate}>지금 업데이트</button>
         <button type="button" className="update-later" onClick={later}>나중에 하기</button>
