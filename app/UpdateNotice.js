@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const VERSION = "1.4.9";
+const VERSION = "1.5.0";
 const STORAGE_KEY = "hankki-jangbu-version";
 
 export default function UpdateNotice() {
@@ -31,11 +31,11 @@ export default function UpdateNotice() {
       <section className="update-card">
         <div className="update-badge">새 버전 v{VERSION}</div>
         <h2 id="update-title">한끼장부가 업데이트되었습니다!</h2>
-        <p className="update-lead">최고관리자 내부 운영 식당과 실제 고객 식당을 분리해 서비스 현황을 더 정확하게 관리합니다.</p>
+        <p className="update-lead">거래처를 안전하게 보관하고 필요할 때 다시 복구할 수 있도록 관리 기능을 더 명확하게 개선했습니다.</p>
         <div className="update-items">
-          <div><strong>운영 / 테스트 식당 분리</strong><span>최고관리자 계정의 식당은 일반 가입 식당 목록과 별도로 표시합니다.</span></div>
-          <div><strong>고객 통계 정확도 개선</strong><span>내부 운영 식당은 전체 식당, 체험 중, 정상 이용, 확인 필요 통계에서 제외합니다.</span></div>
-          <div><strong>내부 식당 무료체험 제외</strong><span>운영용 식당에는 체험기간·사용 중단·삭제 관리 대신 식수 현황만 제공합니다.</span></div>
+          <div><strong>거래처 보관 버튼 추가</strong><span>거래처 수정 화면에서 거래 종료 업체를 바로 보관 처리할 수 있습니다.</span></div>
+          <div><strong>보관된 거래처 별도 표시</strong><span>보관 업체는 현재 거래처 목록과 분리되어 별도 영역에서 확인합니다.</span></div>
+          <div><strong>과거 식수·정산 기록 유지</strong><span>보관해도 기존 식수와 정산 데이터는 삭제되지 않으며 언제든 복구할 수 있습니다.</span></div>
         </div>
         <button type="button" className="update-now" onClick={applyUpdate}>지금 업데이트</button>
         <button type="button" className="update-later" onClick={later}>나중에 하기</button>
