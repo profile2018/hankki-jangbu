@@ -4,6 +4,28 @@ import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "../../lib/supabase/client";
 
+function getKoreanLoginError(error) {
+  const message = String(error?.message || "").toLowerCase();
+
+  if (message.includes("email not confirmed")) {
+    return "이메일 인증이 완료되지 않았습니다. 가입하신 이메일에서 인증 메일을 확인해 주세요.";
+  }
+  if (message.includes("invalid login credentials")) {
+    return "이메일 또는 비밀번호가 올바르지 않습니다. 다시 확인해 주세요.";
+  }
+  if (message.includes("too many requests") || message.includes("rate limit")) {
+    return "로그인 요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.";
+  }
+  if (message.includes("network") || message.includes("fetch")) {
+    return "인터넷 연결을 확인한 후 다시 시도해 주세요.";
+  }
+  if (message.includes("user not found")) {
+    return "등록되지 않은 이메일입니다. 이메일 주소를 확인해 주세요.";
+  }
+
+  return "로그인에 실패했습니다. 입력 내용을 확인한 후 다시 시도해 주세요.";
+}
+
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,7 +42,7 @@ export default function LoginPage() {
       if (error) throw error;
       window.location.href = "/dashboard";
     } catch (error) {
-      setMessage(error.message || "로그인에 실패했습니다.");
+      setMessage(getKoreanLoginError(error));
     } finally {
       setLoading(false);
     }
