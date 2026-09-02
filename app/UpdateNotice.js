@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const VERSION = "1.4.6";
+const VERSION = "1.4.7";
 const STORAGE_KEY = "hankki-jangbu-version";
 
 export default function UpdateNotice() {
@@ -31,11 +31,11 @@ export default function UpdateNotice() {
       <section className="update-card">
         <div className="update-badge">새 버전 v{VERSION}</div>
         <h2 id="update-title">한끼장부가 업데이트되었습니다!</h2>
-        <p className="update-lead">로그인 오류 안내를 이해하기 쉬운 한글 문구로 개선했습니다.</p>
+        <p className="update-lead">이메일 인증을 놓친 사용자도 로그인 화면에서 인증메일을 다시 받을 수 있습니다.</p>
         <div className="update-items">
-          <div><strong>로그인 오류 한글 안내</strong><span>이메일 미인증, 비밀번호 오류 등 주요 로그인 오류를 한글로 안내합니다.</span></div>
-          <div><strong>이메일 미인증 안내 개선</strong><span>인증이 필요한 경우 가입한 이메일에서 인증 메일을 확인하도록 안내합니다.</span></div>
-          <div><strong>기존 키오스크 화면 유지</strong><span>중식·석식 대형 버튼과 인원 입력 화면은 그대로 유지합니다.</span></div>
+          <div><strong>인증메일 다시 보내기</strong><span>이메일 미인증 계정으로 로그인하면 재발송 버튼을 바로 표시합니다.</span></div>
+          <div><strong>재발송 결과 한글 안내</strong><span>성공, 요청 제한, 네트워크 오류 등을 이해하기 쉬운 한글로 안내합니다.</span></div>
+          <div><strong>기존 로그인 흐름 유지</strong><span>인증이 완료된 사용자는 기존과 동일하게 대시보드로 이동합니다.</span></div>
         </div>
         <button type="button" className="update-now" onClick={applyUpdate}>지금 업데이트</button>
         <button type="button" className="update-later" onClick={later}>나중에 하기</button>
