@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const VERSION = "1.4.7";
+const VERSION = "1.4.8";
 const STORAGE_KEY = "hankki-jangbu-version";
 
 export default function UpdateNotice() {
@@ -31,11 +31,11 @@ export default function UpdateNotice() {
       <section className="update-card">
         <div className="update-badge">새 버전 v{VERSION}</div>
         <h2 id="update-title">한끼장부가 업데이트되었습니다!</h2>
-        <p className="update-lead">이메일 인증을 놓친 사용자도 로그인 화면에서 인증메일을 다시 받을 수 있습니다.</p>
+        <p className="update-lead">최고관리자에서 식당별 이용 규모를 월평균 식수로 바로 확인할 수 있습니다.</p>
         <div className="update-items">
-          <div><strong>인증메일 다시 보내기</strong><span>이메일 미인증 계정으로 로그인하면 재발송 버튼을 바로 표시합니다.</span></div>
-          <div><strong>재발송 결과 한글 안내</strong><span>성공, 요청 제한, 네트워크 오류 등을 이해하기 쉬운 한글로 안내합니다.</span></div>
-          <div><strong>기존 로그인 흐름 유지</strong><span>인증이 완료된 사용자는 기존과 동일하게 대시보드로 이동합니다.</span></div>
+          <div><strong>월평균 식수 표시</strong><span>가입 식당 목록에서 최근 3개월 기준 월평균 식수를 확인합니다.</span></div>
+          <div><strong>식수 상세 현황</strong><span>식당명을 누르면 이번 달, 지난달, 최근 3개월 평균, 이번 달 일평균을 보여줍니다.</span></div>
+          <div><strong>취소 기록 제외</strong><span>취소된 식수는 통계에서 자동 제외해 실제 이용량을 기준으로 집계합니다.</span></div>
         </div>
         <button type="button" className="update-now" onClick={applyUpdate}>지금 업데이트</button>
         <button type="button" className="update-later" onClick={later}>나중에 하기</button>
