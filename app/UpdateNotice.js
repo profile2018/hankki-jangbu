@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const VERSION = "1.5.6";
+const VERSION = "1.5.7";
 const STORAGE_KEY = "hankki-jangbu-version";
 const CHECK_INTERVAL = 5 * 60 * 1000;
 
@@ -23,5 +23,5 @@ export default function UpdateNotice() {
   function applyUpdate(){try{localStorage.setItem(STORAGE_KEY,latestVersion);}catch{}const url=new URL(window.location.href);url.searchParams.set("_appv",latestVersion);url.searchParams.set("_refresh",String(Date.now()));window.location.replace(url.toString());}
   function later(){setOpen(false);} if(!open)return null;
 
-  return <div className="update-backdrop" role="dialog" aria-modal="true" aria-labelledby="update-title"><section className="update-card"><div className="update-badge">새 버전 v{latestVersion}</div><h2 id="update-title">한끼장부가 업데이트되었습니다!</h2><p className="update-lead">첫 화면에서 한끼장부의 사용방법과 장점, 요금제를 바로 확인할 수 있습니다.</p><div className="update-items"><div><strong>서비스 안내 메뉴</strong><span>사용방법·한끼장부의 장점·요금제를 첫 화면에서 쉽게 확인할 수 있습니다.</span></div><div><strong>키오스크 기기 안내</strong><span>태블릿은 별도 구매이며 기존 태블릿도 사용 가능하다는 안내를 추가했습니다.</span></div><div><strong>30일 무료체험</strong><span>요금제 안내에서 무료체험을 바로 시작할 수 있습니다.</span></div></div><button type="button" className="update-now" onClick={applyUpdate}>지금 업데이트</button><button type="button" className="update-later" onClick={later}>나중에 하기</button><small>키오스크 화면에는 업데이트 팝업이 표시되지 않습니다.</small></section></div>;
+  return <div className="update-backdrop" role="dialog" aria-modal="true" aria-labelledby="update-title"><section className="update-card"><div className="update-badge">새 버전 v{latestVersion}</div><h2 id="update-title">한끼장부가 업데이트되었습니다!</h2><p className="update-lead">첫 화면 안내를 더 깔끔하게 정리했습니다.</p><div className="update-items"><div><strong>메뉴형 안내</strong><span>사용방법·장점·요금제 내용은 처음부터 펼쳐지지 않고 메뉴를 눌렀을 때만 표시됩니다.</span></div><div><strong>한 번에 하나만 표시</strong><span>다른 메뉴를 누르면 선택한 안내만 보여주어 화면이 길어지지 않습니다.</span></div><div><strong>다시 누르면 닫기</strong><span>현재 선택한 메뉴를 한 번 더 누르면 안내 영역을 접을 수 있습니다.</span></div></div><button type="button" className="update-now" onClick={applyUpdate}>지금 업데이트</button><button type="button" className="update-later" onClick={later}>나중에 하기</button><small>키오스크 화면에는 업데이트 팝업이 표시되지 않습니다.</small></section></div>;
 }
