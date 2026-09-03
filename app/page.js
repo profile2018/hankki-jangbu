@@ -3,6 +3,16 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
+const menuButtonStyle = {
+  border: 0,
+  background: "transparent",
+  color: "#173b6d",
+  font: "inherit",
+  fontWeight: 800,
+  padding: "8px 2px",
+  cursor: "pointer",
+};
+
 export default function Home() {
   const [section, setSection] = useState("");
 
@@ -15,10 +25,13 @@ export default function Home() {
   }, []);
 
   function openSection(name) {
-    setSection((current) => current === name ? "" : name);
-    window.setTimeout(() => {
-      document.getElementById("landing-detail")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 0);
+    const next = section === name ? "" : name;
+    setSection(next);
+    if (next) {
+      window.setTimeout(() => {
+        document.getElementById("landing-detail")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 0);
+    }
   }
 
   return (
@@ -34,11 +47,11 @@ export default function Home() {
       </section>
 
       <nav className="landing-menu" aria-label="한끼장부 서비스 안내">
-        <button type="button" className={section === "how" ? "active" : ""} onClick={() => openSection("how")}>사용방법</button>
+        <button type="button" style={{...menuButtonStyle, textDecoration: section === "how" ? "underline" : "none"}} onClick={() => openSection("how")}>사용방법</button>
         <span>·</span>
-        <button type="button" className={section === "benefits" ? "active" : ""} onClick={() => openSection("benefits")}>한끼장부의 장점</button>
+        <button type="button" style={{...menuButtonStyle, textDecoration: section === "benefits" ? "underline" : "none"}} onClick={() => openSection("benefits")}>한끼장부의 장점</button>
         <span>·</span>
-        <button type="button" className={section === "pricing" ? "active" : ""} onClick={() => openSection("pricing")}>요금제</button>
+        <button type="button" style={{...menuButtonStyle, textDecoration: section === "pricing" ? "underline" : "none"}} onClick={() => openSection("pricing")}>요금제</button>
       </nav>
 
       {section === "how" && (
