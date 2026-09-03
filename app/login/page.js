@@ -4,17 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "../../lib/supabase/client";
 
-function normalizePhone(value) {
+function phoneLoginEmail(value) {
   const digits = String(value || "").replace(/\D/g, "");
-  if (digits.startsWith("82")) return `+${digits}`;
-  if (digits.startsWith("0")) return `+82${digits.slice(1)}`;
-  return `+82${digits}`;
+  return `${digits}@phone.hankkijangbu.kr`;
 }
 
 function getKoreanLoginError(error) {
   const message = String(error?.message || "").toLowerCase();
-  if (message.includes("email not confirmed")) return "기존 이메일 계정의 인증이 완료되지 않았습니다. 관리자에게 문의해 주세요.";
-  if (message.includes("phone not confirmed")) return "휴대폰번호 계정 확인이 필요합니다. 관리자에게 문의해 주세요.";
+  if (message.includes("email not confirmed")) return "계정 확인 설정이 아직 완료되지 않았습니다. 한끼장부 관리자에게 문의해 주세요.";
   if (message.includes("invalid login credentials")) return "휴대폰번호(또는 기존 이메일)와 비밀번호를 다시 확인해 주세요.";
   if (message.includes("too many requests") || message.includes("rate limit")) return "로그인 요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.";
   if (message.includes("network") || message.includes("fetch")) return "인터넷 연결을 확인한 후 다시 시도해 주세요.";
@@ -34,10 +31,13 @@ export default function LoginPage() {
     try {
       const supabase = createClient();
       const id = loginId.trim();
-      const credentials = id.includes("@")
-        ? { email: id, password }
-        : { phone: normalizePhone(id), password };
-      const { error } = await supabase.auth.signInWithPassword(credentials);
+      const digits = id.replace(/\D/g, "");
+      if (!id.includes("@") && !/^01\d{8,9}$/.test(digits)) {
+        setMessage("휴대폰번호를 정확히 입력해 주세요. 예) 010-1234-5678");
+        return;
+      }
+      const email = id.includes("@") ? id : phoneLoginEmail(id);
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       window.location.href = "/dashboard";
     } catch (error) {
