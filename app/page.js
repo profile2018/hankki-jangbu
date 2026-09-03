@@ -8,20 +8,13 @@ export default function Home() {
     const search = window.location.search || "";
     const hash = window.location.hash || "";
     const params = new URLSearchParams(search);
-    const isRecovery =
-      params.has("code") ||
-      params.get("type") === "recovery" ||
-      hash.includes("type=recovery") ||
-      hash.includes("access_token=");
-
-    if (isRecovery) {
-      window.location.replace(`/reset-password${search}${hash}`);
-    }
+    const isRecovery = params.has("code") || params.get("type") === "recovery" || hash.includes("type=recovery") || hash.includes("access_token=");
+    if (isRecovery) window.location.replace(`/reset-password${search}${hash}`);
   }, []);
 
   return (
-    <main className="center-shell">
-      <section className="brand-card">
+    <main className="landing-shell">
+      <section className="brand-card landing-brand-card">
         <div className="brand-mark">한끼</div>
         <h1>한끼장부</h1>
         <p>공단 한식뷔페 식수·정산 관리 서비스</p>
@@ -30,6 +23,44 @@ export default function Home() {
           <Link className="btn secondary" href="/signup">무료체험 시작하기</Link>
         </div>
       </section>
+
+      <nav className="landing-menu" aria-label="한끼장부 서비스 안내">
+        <a href="#how">사용방법</a><span>·</span><a href="#benefits">한끼장부의 장점</a><span>·</span><a href="#pricing">요금제</a>
+      </nav>
+
+      <section className="landing-info" id="how">
+        <div className="landing-section-head"><span>사용방법</span><h2>식수 입력부터 월말 정산까지 간단하게</h2></div>
+        <div className="landing-steps">
+          <article><b>1</b><strong>거래처 등록</strong><p>식사하는 업체와 이용 정보를 등록합니다.</p></article>
+          <article><b>2</b><strong>키오스크 식수 입력</strong><p>직원이 업체번호를 입력하고 중식·석식과 인원을 선택합니다.</p></article>
+          <article><b>3</b><strong>자동 집계</strong><p>사장님 화면에서 오늘 식수와 업체별 이용 현황을 확인합니다.</p></article>
+          <article><b>4</b><strong>월말 정산</strong><p>업체별 청구금액을 자동 집계하고 청구서를 만들 수 있습니다.</p></article>
+        </div>
+        <div className="device-note"><strong>키오스크용 태블릿은 별도 구매입니다.</strong><span>기존에 사용 중인 태블릿이 있다면 별도 구매 없이 한끼장부 키오스크로 사용할 수 있습니다. 기기 사용 가능 여부도 확인해 드립니다.</span></div>
+      </section>
+
+      <section className="landing-info" id="benefits">
+        <div className="landing-section-head"><span>한끼장부의 장점</span><h2>손으로 적던 식수 장부를 더 편하게</h2></div>
+        <div className="benefit-grid">
+          <article><strong>수기장부 간소화</strong><p>매일 손으로 적고 다시 계산하는 일을 줄여줍니다.</p></article>
+          <article><strong>누락·계산 실수 감소</strong><p>등록된 식수를 기준으로 자동 집계해 정산 실수를 줄입니다.</p></article>
+          <article><strong>실시간 식수 확인</strong><p>중식·석식 이용 인원을 사장님 화면에서 바로 확인합니다.</p></article>
+          <article><strong>월말 정산 자동화</strong><p>업체별 식수와 금액을 모아 월말 정산 시간을 크게 줄입니다.</p></article>
+        </div>
+      </section>
+
+      <section className="landing-info" id="pricing">
+        <div className="landing-section-head"><span>요금제</span><h2>30일 동안 먼저 사용해 보세요</h2></div>
+        <div className="pricing-grid">
+          <article><span>무료체험</span><strong>30일 무료</strong><p>한끼장부를 실제 식당에서 충분히 사용해 보세요.</p></article>
+          <article><span>Basic</span><strong>월 29,000원</strong><p>식수 입력·업체 관리·월별 집계와 기본 정산 기능을 제공합니다.</p></article>
+          <article><span>Plus</span><strong>월 49,000원</strong><p>정산 업무를 더 편리하게 만드는 확장 기능을 제공합니다.</p></article>
+        </div>
+        <p className="pricing-device">※ 키오스크 기기 별도 · 기존 태블릿 사용 가능</p>
+        <Link className="btn primary landing-cta" href="/signup">30일 무료체험 시작하기</Link>
+      </section>
+
+      <footer className="landing-footer"><strong>한끼장부</strong><span>공단 한식뷔페 식수·정산 관리 서비스</span></footer>
     </main>
   );
 }
