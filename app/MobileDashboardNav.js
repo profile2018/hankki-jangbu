@@ -26,6 +26,9 @@ export default function MobileDashboardNav(){
 
   async function logout(){const s=createClient();await s.auth.signOut();location.replace("/");}
   function goRestaurant(){const sections=[...document.querySelectorAll(".company-section")];const targetSection=sections[sections.length-1];targetSection?.scrollIntoView({behavior:"smooth",block:"start"});}
+  function goAdmin(){
+    window.location.assign("/admin");
+  }
 
   if(!target)return null;
   return createPortal(
@@ -37,7 +40,7 @@ export default function MobileDashboardNav(){
       <nav className={`mobile-menu-grid ${isAdmin?"has-admin":""}`}>
         <a href="/dashboard" className="mobile-menu-card home"><span className="mobile-menu-icon">⌂</span><b>한끼장부</b></a>
         <button type="button" onClick={goRestaurant} className="mobile-menu-card restaurant"><span className="mobile-menu-icon">🍚</span><b>{restaurantName}</b></button>
-        {isAdmin&&<a href="/admin" className="mobile-menu-card admin"><span className="mobile-menu-icon">♙</span><b>운영자 관리</b></a>}
+        {isAdmin&&<button type="button" onClick={goAdmin} className="mobile-menu-card admin"><span className="mobile-menu-icon">♙</span><b>최고관리자</b></button>}
         <a href="/settlement" className="mobile-menu-card settlement"><span className="mobile-menu-icon">▣</span><b>월별 정산</b></a>
         <a href="/settings" className="mobile-menu-card settings"><span className="mobile-menu-icon">⚙</span><b>설정</b></a>
       </nav>
