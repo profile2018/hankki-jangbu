@@ -3,117 +3,20 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-const menuButtonStyle = {
-  border: 0,
-  background: "transparent",
-  color: "#173b6d",
-  font: "inherit",
-  fontWeight: 800,
-  padding: "8px 2px",
-  cursor: "pointer",
-};
+const menuButtonStyle = { border:0, background:"transparent", color:"#173b6d", font:"inherit", fontWeight:800, padding:"8px 2px", cursor:"pointer" };
 
 export default function Home() {
-  const [section, setSection] = useState("");
-  const [flyerOpen, setFlyerOpen] = useState(false);
-
-  useEffect(() => {
-    const search = window.location.search || "";
-    const hash = window.location.hash || "";
-    const params = new URLSearchParams(search);
-    const isRecovery = params.has("code") || params.get("type") === "recovery" || hash.includes("type=recovery") || hash.includes("access_token=");
-    if (isRecovery) window.location.replace(`/reset-password${search}${hash}`);
-  }, []);
-
-  function openSection(name) {
-    const next = section === name ? "" : name;
-    setSection(next);
-    if (next) {
-      window.setTimeout(() => {
-        document.getElementById("landing-detail")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 0);
-    }
-  }
-
-  return (
-    <main className="landing-shell">
-      <section className="brand-card landing-brand-card">
-        <div className="brand-mark">한끼</div>
-        <h1>한끼장부</h1>
-        <p>공단 한식뷔페 식수·정산 관리 서비스</p>
-        <div className="stack">
-          <Link className="btn primary" href="/login">로그인</Link>
-          <Link className="btn secondary" href="/signup">무료체험 시작하기</Link>
-        </div>
-      </section>
-
-      <nav className="landing-menu" aria-label="한끼장부 서비스 안내">
-        <button type="button" style={{...menuButtonStyle, textDecoration: section === "how" ? "underline" : "none"}} onClick={() => openSection("how")}>사용방법</button>
-        <span>·</span>
-        <button type="button" style={{...menuButtonStyle, textDecoration: section === "benefits" ? "underline" : "none"}} onClick={() => openSection("benefits")}>한끼장부의 장점</button>
-        <span>·</span>
-        <button type="button" style={{...menuButtonStyle, textDecoration: section === "pricing" ? "underline" : "none"}} onClick={() => openSection("pricing")}>요금제</button>
-        <span>·</span>
-        <button type="button" style={menuButtonStyle} onClick={() => setFlyerOpen(true)}>전단지 보기</button>
-      </nav>
-
-      {section === "how" && (
-        <section className="landing-info" id="landing-detail">
-          <div className="landing-section-head"><span>사용방법</span><h2>식수 입력부터 월말 정산까지 간단하게</h2></div>
-          <div className="landing-steps">
-            <article><b>1</b><strong>거래처 등록</strong><p>식사하는 업체와 이용 정보를 등록합니다.</p></article>
-            <article><b>2</b><strong>키오스크 식수 입력</strong><p>직원이 업체번호를 입력하고 중식·석식과 인원을 선택합니다.</p></article>
-            <article><b>3</b><strong>자동 집계</strong><p>사장님 화면에서 오늘 식수와 업체별 이용 현황을 확인합니다.</p></article>
-            <article><b>4</b><strong>월말 정산</strong><p>업체별 청구금액을 자동 집계하고 청구서를 만들 수 있습니다.</p></article>
-          </div>
-          <div className="device-note"><strong>키오스크용 태블릿은 별도 구매입니다.</strong><span>기존에 사용 중인 태블릿이 있다면 별도 구매 없이 한끼장부 키오스크로 사용할 수 있습니다. 기기 사용 가능 여부도 확인해 드립니다.</span></div>
-        </section>
-      )}
-
-      {section === "benefits" && (
-        <section className="landing-info" id="landing-detail">
-          <div className="landing-section-head"><span>한끼장부의 장점</span><h2>손으로 적던 식수 장부를 더 편하게</h2></div>
-          <div className="benefit-grid">
-            <article><strong>수기장부 간소화</strong><p>매일 손으로 적고 다시 계산하는 일을 줄여줍니다.</p></article>
-            <article><strong>누락·계산 실수 감소</strong><p>등록된 식수를 기준으로 자동 집계해 정산 실수를 줄입니다.</p></article>
-            <article><strong>실시간 식수 확인</strong><p>중식·석식 이용 인원을 사장님 화면에서 바로 확인합니다.</p></article>
-            <article><strong>월말 정산 자동화</strong><p>업체별 식수와 금액을 모아 월말 정산 시간을 크게 줄입니다.</p></article>
-          </div>
-        </section>
-      )}
-
-      {section === "pricing" && (
-        <section className="landing-info" id="landing-detail">
-          <div className="landing-section-head"><span>요금제</span><h2>30일 동안 먼저 사용해 보세요</h2></div>
-          <div className="pricing-grid">
-            <article><span>무료체험</span><strong>30일 무료</strong><p>한끼장부를 실제 식당에서 충분히 사용해 보세요.</p></article>
-            <article><span>Basic</span><strong>월 29,000원</strong><p>식수 입력·업체 관리·월별 집계와 기본 정산 기능을 제공합니다.</p></article>
-            <article><span>Plus</span><strong>월 49,000원</strong><p>정산 업무를 더 편리하게 만드는 확장 기능을 제공합니다.</p></article>
-          </div>
-          <p className="pricing-device">※ 키오스크 기기 별도 · 기존 태블릿 사용 가능</p>
-          <Link className="btn primary landing-cta" href="/signup">30일 무료체험 시작하기</Link>
-        </section>
-      )}
-
-      <footer className="landing-footer"><strong>한끼장부</strong><span>공단 한식뷔페 식수·정산 관리 서비스</span></footer>
-
-      {flyerOpen && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="한끼장부 전단지"
-          onClick={() => setFlyerOpen(false)}
-          style={{position:"fixed",inset:0,zIndex:1000,background:"rgba(15,23,42,.82)",overflowY:"auto",padding:"20px 14px 36px"}}
-        >
-          <div onClick={(e) => e.stopPropagation()} style={{width:"min(860px,100%)",margin:"0 auto",position:"relative"}}>
-            <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:12,position:"sticky",top:8,zIndex:2}}>
-              <a href="/hankki-flyer.svg" target="_blank" rel="noreferrer" className="btn secondary" style={{padding:"11px 14px"}}>새 창에서 크게 보기</a>
-              <button type="button" onClick={() => setFlyerOpen(false)} className="btn primary" style={{padding:"11px 18px"}}>닫기 ✕</button>
-            </div>
-            <img src="/hankki-flyer.svg" alt="한끼장부 서비스 소개 전단지" style={{display:"block",width:"100%",height:"auto",borderRadius:18,background:"#fff",boxShadow:"0 18px 70px rgba(0,0,0,.35)"}} />
-          </div>
-        </div>
-      )}
-    </main>
-  );
+  const [section,setSection]=useState("");
+  const [flyerOpen,setFlyerOpen]=useState(false);
+  useEffect(()=>{const search=window.location.search||"";const hash=window.location.hash||"";const params=new URLSearchParams(search);const isRecovery=params.has("code")||params.get("type")==="recovery"||hash.includes("type=recovery")||hash.includes("access_token=");if(isRecovery)window.location.replace(`/reset-password${search}${hash}`);},[]);
+  function openSection(name){const next=section===name?"":name;setSection(next);if(next)window.setTimeout(()=>document.getElementById("landing-detail")?.scrollIntoView({behavior:"smooth",block:"start"}),0);}
+  return <main className="landing-shell">
+    <section className="brand-card landing-brand-card"><div className="brand-mark">한끼</div><h1>한끼장부</h1><p>공단 한식뷔페 식수·정산 관리 서비스</p><div className="stack"><Link className="btn primary" href="/login">로그인</Link><Link className="btn secondary" href="/signup">무료체험 시작하기</Link></div></section>
+    <nav className="landing-menu" aria-label="한끼장부 서비스 안내"><button type="button" style={{...menuButtonStyle,textDecoration:section==="how"?"underline":"none"}} onClick={()=>openSection("how")}>사용방법</button><span>·</span><button type="button" style={{...menuButtonStyle,textDecoration:section==="benefits"?"underline":"none"}} onClick={()=>openSection("benefits")}>한끼장부의 장점</button><span>·</span><button type="button" style={{...menuButtonStyle,textDecoration:section==="pricing"?"underline":"none"}} onClick={()=>openSection("pricing")}>요금제</button><span>·</span><button type="button" style={menuButtonStyle} onClick={()=>setFlyerOpen(true)}>전단지 보기</button></nav>
+    {section==="how"&&<section className="landing-info" id="landing-detail"><div className="landing-section-head"><span>사용방법</span><h2>식수 입력부터 월말 정산까지 간단하게</h2></div><div className="landing-steps"><article><b>1</b><strong>거래처 등록</strong><p>식사하는 업체와 이용 정보를 등록합니다.</p></article><article><b>2</b><strong>키오스크 식수 입력</strong><p>직원이 업체번호를 입력하고 중식·석식과 인원을 선택합니다.</p></article><article><b>3</b><strong>자동 집계</strong><p>사장님 화면에서 오늘 식수와 업체별 이용 현황을 확인합니다.</p></article><article><b>4</b><strong>월말 정산</strong><p>업체별 청구금액을 자동 집계하고 청구서를 만들 수 있습니다.</p></article></div><div className="device-note"><strong>키오스크용 태블릿은 별도 구매입니다.</strong><span>기존에 사용 중인 태블릿이 있다면 별도 구매 없이 한끼장부 키오스크로 사용할 수 있습니다. 기기 사용 가능 여부도 확인해 드립니다.</span></div></section>}
+    {section==="benefits"&&<section className="landing-info" id="landing-detail"><div className="landing-section-head"><span>한끼장부의 장점</span><h2>손으로 적던 식수 장부를 더 편하게</h2></div><div className="benefit-grid"><article><strong>수기장부 간소화</strong><p>매일 손으로 적고 다시 계산하는 일을 줄여줍니다.</p></article><article><strong>누락·계산 실수 감소</strong><p>등록된 식수를 기준으로 자동 집계해 정산 실수를 줄입니다.</p></article><article><strong>실시간 식수 확인</strong><p>중식·석식 이용 인원을 사장님 화면에서 바로 확인합니다.</p></article><article><strong>월말 정산 자동화</strong><p>업체별 식수와 금액을 모아 월말 정산 시간을 크게 줄입니다.</p></article></div></section>}
+    {section==="pricing"&&<section className="landing-info" id="landing-detail"><div className="landing-section-head"><span>요금제</span><h2>30일 동안 먼저 사용해 보세요</h2></div><div className="pricing-grid"><article><span>무료체험</span><strong>30일 무료</strong><p>한끼장부를 실제 식당에서 충분히 사용해 보세요.</p></article><article><span>Basic</span><strong>월 29,000원</strong><p>식수 입력·업체 관리·월별 집계와 기본 정산 기능을 제공합니다.</p></article><article><span>Plus</span><strong>월 49,000원</strong><p>정산 업무를 더 편리하게 만드는 확장 기능을 제공합니다.</p></article></div><p className="pricing-device">※ 키오스크 기기 별도 · 기존 태블릿 사용 가능</p><Link className="btn primary landing-cta" href="/signup">30일 무료체험 시작하기</Link></section>}
+    <footer className="landing-footer"><strong>한끼장부</strong><span>공단 한식뷔페 식수·정산 관리 서비스</span></footer>
+    {flyerOpen&&<div role="dialog" aria-modal="true" aria-label="한끼장부 전단지" onClick={()=>setFlyerOpen(false)} style={{position:"fixed",inset:0,zIndex:1000,background:"rgba(15,23,42,.82)",overflowY:"auto",padding:"20px 14px 36px"}}><div onClick={e=>e.stopPropagation()} style={{width:"min(860px,100%)",margin:"0 auto",position:"relative"}}><div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:12,position:"sticky",top:8,zIndex:2}}><a href="/hankki-flyer.jpeg" target="_blank" rel="noreferrer" className="btn secondary" style={{padding:"11px 14px"}}>새 창에서 크게 보기</a><button type="button" onClick={()=>setFlyerOpen(false)} className="btn primary" style={{padding:"11px 18px"}}>닫기 ✕</button></div><img src="/hankki-flyer.jpeg" alt="한끼장부 서비스 소개 전단지" style={{display:"block",width:"100%",height:"auto",borderRadius:18,background:"#fff",boxShadow:"0 18px 70px rgba(0,0,0,.35)"}} /></div></div>}
+  </main>;
 }
