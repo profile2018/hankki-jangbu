@@ -7,13 +7,13 @@
   .mobile-dashboard-title strong{font-size:30px;letter-spacing:-1.1px;color:#102a52}
   .mobile-dashboard-title span{font-size:15px;color:#667085}
   .mobile-logout{border:1px solid #e2e8f0;background:#fff;color:#173b6d;border-radius:16px;padding:12px 14px;font-weight:800;box-shadow:0 6px 18px rgba(23,59,109,.05)}
+  .mobile-admin-entry{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:13px;margin-bottom:12px;padding:16px 18px;border-radius:20px;text-decoration:none;color:#fff;background:linear-gradient(145deg,#285fc4,#173f7b);box-shadow:0 14px 30px rgba(23,63,123,.2)}
+  .mobile-admin-entry>span{font-size:30px;line-height:1}.mobile-admin-entry>div{display:grid;gap:3px}.mobile-admin-entry b{font-size:17px}.mobile-admin-entry small{font-size:12px;opacity:.86;line-height:1.4}.mobile-admin-entry>strong{font-size:30px;font-weight:400}
   .mobile-menu-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-  .mobile-menu-grid.has-admin{grid-template-columns:repeat(5,minmax(0,1fr))}
   .mobile-menu-card{min-width:0;min-height:108px;border:0;border-radius:22px;background:#fff;color:#344054;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:12px 8px;font:inherit;box-shadow:0 8px 22px rgba(16,24,40,.06);border:1px solid #edf1f5}
   .mobile-menu-card b{font-size:13px;line-height:1.25;text-align:center;word-break:keep-all}
   .mobile-menu-icon{font-size:27px;line-height:1}
   .mobile-menu-card.restaurant{color:#0f8f63}
-  .mobile-menu-card.admin{background:linear-gradient(160deg,#2f70e8,#174bbd);color:#fff;box-shadow:0 14px 28px rgba(36,87,190,.25)}
   .mobile-menu-card.settlement{color:#6941c6}
   .mobile-menu-card.settings{color:#475467}
   .hero{margin-top:0;border-radius:26px;padding:28px 24px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(145deg,#255cb5,#173f7b);box-shadow:0 16px 34px rgba(23,59,109,.16);position:relative;overflow:hidden}
@@ -31,11 +31,12 @@
   .premium-grid{grid-template-columns:1fr!important}
 }
 @media(max-width:430px){
-  .mobile-menu-grid,.mobile-menu-grid.has-admin{grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
-  .mobile-menu-card{min-height:96px;padding:10px 5px;border-radius:18px}
-  .mobile-menu-card b{font-size:11px}.mobile-menu-icon{font-size:23px}
+  .mobile-menu-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .mobile-menu-card{min-height:90px;padding:10px 7px;border-radius:18px}
+  .mobile-menu-card b{font-size:12px}.mobile-menu-icon{font-size:23px}
   .mobile-dashboard-title strong{font-size:28px}
   .mobile-logout{padding:10px 11px}.mobile-logout span{display:none}
+  .mobile-admin-entry{padding:15px 16px}.mobile-admin-entry b{font-size:16px}.mobile-admin-entry small{font-size:11px}
   .hero h1{font-size:30px}.hero{min-height:235px;padding:26px 22px}
 }
 @media(min-width:681px){.mobile-dashboard-nav{display:none!important}}
