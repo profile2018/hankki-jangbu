@@ -15,6 +15,7 @@ const menuButtonStyle = {
 
 export default function Home() {
   const [section, setSection] = useState("");
+  const [flyerOpen, setFlyerOpen] = useState(false);
 
   useEffect(() => {
     const search = window.location.search || "";
@@ -52,6 +53,8 @@ export default function Home() {
         <button type="button" style={{...menuButtonStyle, textDecoration: section === "benefits" ? "underline" : "none"}} onClick={() => openSection("benefits")}>한끼장부의 장점</button>
         <span>·</span>
         <button type="button" style={{...menuButtonStyle, textDecoration: section === "pricing" ? "underline" : "none"}} onClick={() => openSection("pricing")}>요금제</button>
+        <span>·</span>
+        <button type="button" style={menuButtonStyle} onClick={() => setFlyerOpen(true)}>전단지 보기</button>
       </nav>
 
       {section === "how" && (
@@ -93,6 +96,24 @@ export default function Home() {
       )}
 
       <footer className="landing-footer"><strong>한끼장부</strong><span>공단 한식뷔페 식수·정산 관리 서비스</span></footer>
+
+      {flyerOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="한끼장부 전단지"
+          onClick={() => setFlyerOpen(false)}
+          style={{position:"fixed",inset:0,zIndex:1000,background:"rgba(15,23,42,.82)",overflowY:"auto",padding:"20px 14px 36px"}}
+        >
+          <div onClick={(e) => e.stopPropagation()} style={{width:"min(860px,100%)",margin:"0 auto",position:"relative"}}>
+            <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:12,position:"sticky",top:8,zIndex:2}}>
+              <a href="/hankki-flyer.svg" target="_blank" rel="noreferrer" className="btn secondary" style={{padding:"11px 14px"}}>새 창에서 크게 보기</a>
+              <button type="button" onClick={() => setFlyerOpen(false)} className="btn primary" style={{padding:"11px 18px"}}>닫기 ✕</button>
+            </div>
+            <img src="/hankki-flyer.svg" alt="한끼장부 서비스 소개 전단지" style={{display:"block",width:"100%",height:"auto",borderRadius:18,background:"#fff",boxShadow:"0 18px 70px rgba(0,0,0,.35)"}} />
+          </div>
+        </div>
+      )}
     </main>
   );
 }
