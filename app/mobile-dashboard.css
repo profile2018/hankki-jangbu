@@ -40,3 +40,25 @@
   .hero h1{font-size:30px}.hero{min-height:235px;padding:26px 22px}
 }
 @media(min-width:681px){.mobile-dashboard-nav{display:none!important}}
+
+/* v1.6.6 — match mobile dashboard to the warm restaurant palette. */
+@media(max-width:680px){
+.dashboard-shell{background:#fff8eb}
+.mobile-dashboard-title strong{color:#49372b}
+.mobile-dashboard-title span{color:#766354}
+.mobile-logout{background:#fff;border-color:#f0dfc9;color:#884716;box-shadow:0 6px 18px rgba(117,75,38,.06)}
+.mobile-admin-entry{background:linear-gradient(145deg,#b94228,#c94f2d);box-shadow:0 14px 30px rgba(159,63,35,.17)}
+.mobile-menu-card{background:#fff;border-color:#f0dfc9;color:#49372b;box-shadow:0 8px 22px rgba(117,75,38,.06)}
+.mobile-menu-card.restaurant{color:#56805a}
+.mobile-menu-card.settlement{color:#c94f2d}
+.mobile-menu-card.settings{color:#766354}
+.dashboard-shell .hero{background:linear-gradient(145deg,#b94228,#c94f2d 65%,#e88436);box-shadow:0 16px 34px rgba(159,63,35,.17)}
+.cards{background:#fff;border-color:#f0dfc9}
+.dashboard-shell .cards article:nth-child(1){background:#fff2e3!important}
+.dashboard-shell .cards article:nth-child(2){background:#fff8eb!important}
+.dashboard-shell .cards article:nth-child(3){background:#e7f0e4!important}
+.dashboard-shell .cards article:nth-child(4){background:#fff2d5!important}
+.cards span{color:#766354!important}
+.cards strong,.cards article:nth-child(2) strong,.cards article:nth-child(3) strong,.cards article:nth-child(4) strong{color:#49372b!important}
+.company-section{box-shadow:0 8px 24px rgba(117,75,38,.045)}
+}
