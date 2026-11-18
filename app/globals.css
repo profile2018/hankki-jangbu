@@ -3,3 +3,32 @@
 .statement-toolbar .statement-email-button{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:10px 16px;border:1px solid #0f766e;border-radius:9px;background:#d9f5ed;color:#115e59;font-weight:700;cursor:pointer}.statement-toolbar .statement-email-button:hover:not(:disabled){background:#b8eadc}.statement-toolbar .statement-email-button:focus-visible{outline:3px solid #5eead4;outline-offset:2px}.statement-toolbar .statement-email-button:disabled{opacity:.6;cursor:wait}
 
 .topbar .dashboard-version{display:inline-flex;align-items:center;margin-left:10px;padding:3px 9px;border-radius:999px;background:#e7edf8;color:#31527e;font-size:12px;font-weight:700;white-space:nowrap;vertical-align:middle}
+
+/* Warm, approachable restaurant-management palette; kiosk and printable invoices unchanged. */
+:root{background:#faf7f1;color:#342d27}
+body{background:#faf7f1}
+.dashboard-shell{color:#342d27}
+.dashboard-shell .hero{background:linear-gradient(115deg,#83502f 0%,#ad6939 60%,#c48649 100%);box-shadow:0 10px 28px rgba(133,80,47,.13)}
+.dashboard-shell .cards article,.dashboard-shell .company-section{background:#fffdf9;border-color:#ebdfd0;box-shadow:0 4px 16px rgba(104,71,44,.035)}
+.dashboard-shell .cards article:nth-child(1){background:#fff4e5}
+.dashboard-shell .cards article:nth-child(2){background:#f6f1e9}
+.dashboard-shell .cards article:nth-child(3){background:#f1f5e9}
+.dashboard-shell .cards article:nth-child(4){background:#fff1e9}
+.dashboard-shell .cards span,.dashboard-shell .section-head p,.dashboard-shell .company-list article span,.dashboard-shell .meal-record-list span{color:#75685e}
+.dashboard-shell .company-list article,.dashboard-shell .meal-record-list article{border-color:#ebdfd0;background:#fffefa}
+.dashboard-shell .company-form{background:#faf4eb}
+.dashboard-shell .primary{background:#a85f2e;color:#fff}
+.dashboard-shell .secondary,.dashboard-shell .record-edit{background:#f6e7d5;color:#76451f}
+.dashboard-shell .topbar .dashboard-version{background:#fce7cc;color:#8c4d1f;border:1px solid #edc99e}
+.dashboard-shell .topbar span{color:#75685e}
+.dashboard-shell input,.dashboard-shell select{border-color:#dfd0be}
+.dashboard-shell .btn:hover:not(:disabled){filter:brightness(.96)}
+.landing-shell{background:#faf7f1}
+.landing-menu,.landing-footer strong,.landing-section-head span,.pricing-grid span{color:#a35c2d}
+.landing-info{border-color:#ebdfd0;background:#fffdf9}
+.landing-steps article,.benefit-grid article,.pricing-grid article{background:#fff8ef;border-color:#ebdfd0}
+.landing-steps b{background:#a85f2e}
+.landing-shell .primary{background:#a85f2e}
+.landing-shell .secondary{background:#f6e7d5;color:#76451f}
+.landing-shell .device-note{background:#fff0d9;color:#74491f}
+@media print{body{background:#fff}}
