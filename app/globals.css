@@ -32,3 +32,34 @@ body{background:#faf7f1}
 .landing-shell .secondary{background:#f6e7d5;color:#76451f}
 .landing-shell .device-note{background:#fff0d9;color:#74491f}
 @media print{body{background:#fff}}
+
+/* v1.6.6 — appetizing warm palette: vanilla, tomato, orange, honey, herb. */
+:root{color:#49372b;background:#fff8eb}
+body{background:#fff8eb;color:#49372b}
+.dashboard-shell{color:#49372b}
+.dashboard-shell .hero{background:linear-gradient(120deg,#b94228,#c94f2d 60%,#df7134);box-shadow:0 12px 30px rgba(159,63,35,.15)}
+.dashboard-shell .cards article,.dashboard-shell .company-section{background:#fff;border-color:#f0dfc9}
+.dashboard-shell .cards article:nth-child(1){background:#fff2e3}
+.dashboard-shell .cards article:nth-child(2){background:#fff8eb}
+.dashboard-shell .cards article:nth-child(3){background:#e7f0e4}
+.dashboard-shell .cards article:nth-child(4){background:#fff2d5}
+.dashboard-shell .cards strong,.dashboard-shell .section-head h2{color:#49372b}
+.dashboard-shell .primary{background:#e88436;color:#fff}
+.dashboard-shell .secondary,.dashboard-shell .record-edit{background:#fff0d7;color:#884716}
+.dashboard-shell .company-form{background:#fff8eb}
+.dashboard-shell .company-list article,.dashboard-shell .meal-record-list article{border-color:#f0dfc9;background:#fffefa}
+.dashboard-shell .topbar .dashboard-version{background:#fff0d7;color:#884716;border-color:#f4c66a}
+.dashboard-shell .topbar span,.dashboard-shell .cards span,.dashboard-shell .section-head p{color:#766354}
+.dashboard-shell input,.dashboard-shell select{border-color:#e6d5bd}
+.dashboard-shell .settlement-hero{background:linear-gradient(120deg,#b94228,#c94f2d)}
+.landing-shell{background:#fff8eb}
+.landing-info{background:#fff;border-color:#f0dfc9}
+.landing-menu,.landing-footer strong,.landing-section-head span,.pricing-grid span{color:#c94f2d}
+.landing-steps article,.benefit-grid article,.pricing-grid article{background:#fff8eb;border-color:#f0dfc9}
+.landing-steps b{background:#c94f2d}
+.landing-shell .primary{background:#e88436}
+.landing-shell .secondary{background:#fff0d7;color:#884716}
+.landing-shell .device-note{background:#fff0d7;color:#70451f}
+.landing-shell .pricing-grid strong{color:#49372b}
+.landing-shell .brand-mark{background:#c94f2d}
+@media print{body{background:#fff;color:#172033}}
