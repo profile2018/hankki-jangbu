@@ -63,3 +63,36 @@ body{background:#fff8eb;color:#49372b}
 .landing-shell .pricing-grid strong{color:#49372b}
 .landing-shell .brand-mark{background:#c94f2d}
 @media print{body{background:#fff;color:#172033}}
+
+/* v1.6.7 — kiosk warm food-inspired palette. Layout and touch targets unchanged. */
+.kiosk-shell{background:linear-gradient(145deg,#fff8eb,#fff0d7);color:#49372b}
+.kiosk-card{background:#fffdf8;border-color:#f0dfc9;box-shadow:0 20px 60px rgba(117,75,38,.12)}
+.kiosk-head strong,.kiosk-title h1,.company-confirm h1{color:#49372b}
+.kiosk-head span,.company-confirm span,.kiosk-clock span,.kiosk-reselect-panel p{color:#766354}
+.kiosk-brand-button .mini-brand,.kiosk-shell .mini-brand{background:#c94f2d;color:#fff}
+.kiosk-admin-button,.kiosk-company-back{background:#fff0d7;color:#884716;border-color:#f0d1a5}
+.kiosk-pin-display span{background:#fff8eb;border-color:#e6d5bd;color:#c94f2d}
+.kiosk-pin-display span.filled{background:#fff0d7;border-color:#e88436;color:#c94f2d}
+.kiosk-keypad button,.headcount-keypad button{background:#fff8eb;color:#49372b;border-color:#ead7bd}
+.kiosk-keypad button:active,.headcount-keypad button:active{background:#ffe1b8}
+.kiosk-keypad .keypad-action,.headcount-keypad .keypad-action{background:#f5e8d8;color:#884716}
+.kiosk-shell .btn.primary,.kiosk-pin-confirm{background:#e88436;color:#fff;border-color:#e88436}
+.kiosk-shell .btn.secondary{background:#fff0d7;color:#884716}
+.company-confirm{background:#fff8eb;border-color:#f0dfc9}
+.company-confirm button{background:#fff0d7;color:#884716}
+.meal-buttons button.lunch{background:#fff2e3;border-color:#f4c69e;color:#884716}
+.meal-buttons button.dinner{background:#fff8eb;border-color:#e8d1a4;color:#884716}
+.meal-buttons button.lunch.active{background:#c94f2d;border-color:#c94f2d;color:#fff}
+.meal-buttons button.dinner.active{background:#56805a;border-color:#56805a;color:#fff}
+.meal-buttons button:not(.active) strong{color:#766354}
+.meal-buttons button.active strong{color:#fff}
+.headcount-keypad-panel,.headcount-current{background:#fff8eb;border-color:#f0dfc9}
+.headcount-current strong{color:#c94f2d}
+.headcount-current button{background:#fff0d7;color:#884716;border-color:#f0d1a5}
+.kiosk-shell .kiosk-submit.lunch-submit{background:#c94f2d;color:#fff}
+.kiosk-shell .kiosk-submit.dinner-submit{background:#56805a;color:#fff}
+.kiosk-shell .kiosk-submit:disabled{opacity:.65}
+.kiosk-done .done-mark{background:#e7f0e4;color:#56805a}
+.kiosk-done .meal-wish,.done-dinner .meal-wish{color:#c94f2d}
+.kiosk-admin-modal{background:#fffdf8;color:#49372b;border-color:#f0dfc9}
+.kiosk-admin-backdrop{background:rgba(52,36,25,.65)}
