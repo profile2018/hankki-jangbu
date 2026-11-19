@@ -106,3 +106,32 @@ body{background:#fff8eb;color:#49372b}
 .kiosk-display-setting input[type=checkbox]{appearance:auto;accent-color:#56805a;width:23px;height:23px;flex:none;cursor:pointer}
 .kiosk-display-setting p{margin:12px 0 8px;font-size:13px;font-weight:700;color:#56805a}
 .kiosk-display-setting>small{display:block}
+
+/* Subscription management */
+.subscription-shell{max-width:850px;margin:0 auto;padding:24px 18px 72px;color:#49372b}
+.subscription-top{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:14px}
+.subscription-top a{color:#a84a27;font-weight:800;text-decoration:none}
+.subscription-shell header{padding:32px 0 22px}
+.subscription-eyebrow{font-size:12px;font-weight:800;color:#c94f2d;letter-spacing:.06em}
+.subscription-shell h1{font-size:34px;margin:8px 0}
+.subscription-shell h2{font-size:20px;margin:24px 0 14px}
+.subscription-shell header p,.subscription-summary p{color:#766354}
+.subscription-trial{display:grid;grid-template-columns:1fr 1fr;gap:14px;background:#fff3df;border:1px solid #f0dfc9;border-radius:20px;padding:20px}
+.subscription-trial>div{display:grid;gap:6px}
+.subscription-trial small,.subscription-trial span{color:#766354;font-size:13px}
+.subscription-trial strong{font-size:21px}
+.subscription-plans{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.subscription-plans button{display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;border:2px solid #ead7bd;border-radius:18px;background:#fffdf8;color:#49372b;padding:22px;cursor:pointer}
+.subscription-plans button.selected{border-color:#c94f2d;background:#fff5e8}
+.subscription-plans button>strong{font-size:20px}
+.subscription-plans button>span{font-size:13px;color:#766354}
+.subscription-plans button b{font-size:25px;margin-top:8px}
+.subscription-plans button b small{font-size:13px;font-weight:400}
+.subscription-summary{background:#fffdf8;border:1px solid #f0dfc9;border-radius:20px;padding:22px;margin-top:24px}
+.subscription-summary h2{margin:0 0 18px}
+.subscription-summary>div{display:flex;justify-content:space-between;gap:10px}
+.subscription-summary>div strong{font-size:22px}
+.subscription-summary button{width:100%;border:0;border-radius:12px;background:#b4aaa0;color:white;font-size:16px;font-weight:800;padding:15px;margin:12px 0;cursor:not-allowed}
+.subscription-summary>small{display:block;color:#766354;line-height:1.6}
+.subscription-shell footer{margin-top:32px;text-align:center;color:#897768;font-size:12px}
+@media(max-width:600px){.subscription-plans,.subscription-trial{grid-template-columns:1fr}.subscription-shell h1{font-size:28px}}
