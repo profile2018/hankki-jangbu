@@ -96,3 +96,13 @@ body{background:#fff8eb;color:#49372b}
 .kiosk-done .meal-wish,.done-dinner .meal-wish{color:#c94f2d}
 .kiosk-admin-modal{background:#fffdf8;color:#49372b;border-color:#f0dfc9}
 .kiosk-admin-backdrop{background:rgba(52,36,25,.65)}
+
+/* v1.6.10 kiosk screen wake lock settings */
+.kiosk-display-setting{margin:18px 0;padding:16px;border:1px solid #f0dfc9;border-radius:16px;background:#fff8eb;text-align:left}
+.kiosk-display-setting label{display:flex;align-items:center;justify-content:space-between;gap:14px;cursor:pointer}
+.kiosk-display-setting label span{display:grid;gap:4px}
+.kiosk-display-setting label strong{color:#49372b;font-size:16px}
+.kiosk-display-setting label small,.kiosk-display-setting>small{color:#766354;font-size:12px;line-height:1.5}
+.kiosk-display-setting input[type=checkbox]{appearance:auto;accent-color:#56805a;width:23px;height:23px;flex:none;cursor:pointer}
+.kiosk-display-setting p{margin:12px 0 8px;font-size:13px;font-weight:700;color:#56805a}
+.kiosk-display-setting>small{display:block}
