@@ -19,7 +19,7 @@ alter table public.billing_registrations enable row level security;
 revoke all on public.billing_registrations from anon,authenticated;
 grant select(id,restaurant_id,user_id,customer_key,state,plan,status) on public.billing_registrations to authenticated;
 grant insert(restaurant_id,user_id,customer_key,state,plan,status) on public.billing_registrations to authenticated;
-grant update(billing_key,status,card_company,card_number,registered_at) on public.billing_registrations to authenticated;
+-- Only server-side service-role code may write billing keys.
 create policy "billing_registration_select_owner" on public.billing_registrations for select to authenticated using (user_id=(select auth.uid()) and exists(select 1 from public.restaurant_members m where m.restaurant_id=billing_registrations.restaurant_id and m.user_id=(select auth.uid())));
 create policy "billing_registration_insert_owner" on public.billing_registrations for insert to authenticated with check (user_id=(select auth.uid()) and status='pending' and exists(select 1 from public.restaurant_members m where m.restaurant_id=billing_registrations.restaurant_id and m.user_id=(select auth.uid())));
-create policy "billing_registration_update_owner" on public.billing_registrations for update to authenticated using (user_id=(select auth.uid()) and status='pending') with check (user_id=(select auth.uid()) and status='registered');
+
